@@ -30,9 +30,9 @@ const mysql = require('mysql');
 // sql connection
 const db = mysql.createConnection({
   host: 'localhost',
-  user: '',
-  password: '',
-  database: ''
+  user: 'root',
+  password: 'c4shfl0w4pp',
+  database: 'cashflowapp'
 });
 
 db.connect((err) => {
