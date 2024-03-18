@@ -9,6 +9,52 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
+
+// swagger setup
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Cashflow API',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./routes/*.js'], // files containing annotations as above
+};
+
+const mysql = require('mysql');
+
+// sql connection
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: '',
+  password: '',
+  database: ''
+});
+
+db.connect((err) => {
+  if (err) {
+    console.log(err);
+  }
+  else {
+    console.log('Connected to database');
+  }
+});
+
+// Make db accessible to your routes
+app.use((req, res, next) => {
+  req.db = db;
+  next();
+});
+
+const openapiSpecification = swaggerJsdoc(options);
+
+app.use('/', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
