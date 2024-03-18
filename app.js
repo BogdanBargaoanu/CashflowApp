@@ -52,7 +52,7 @@ app.use((req, res, next) => {
 
 const openapiSpecification = swaggerJsdoc(options);
 
-app.use('/', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+app.use('/api', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 
 // view engine setup
