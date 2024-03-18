@@ -27,15 +27,29 @@ Cashflow management app.
 
     ```bash
     npm install
+    ```
+    <i> Note - dependencies should also be installed for the cashflow-client app. </i>
 
-4. **Start the app:**
+4. **Start the API:**
 
-   Run the following command in your terminal to start the application:
+   Run the following command in your terminal to start the API:
 
    ```bash
    npm start
 
-5. **Access the app:**
+5. **Access the API:**
 
    Open your web browser and navigate to `http://localhost:3000`.
+
+6. **Start the app:**
+
+   Navigate to the `cashflow-client` directory and use the following command in the terminal:
+
+   ```bash
+   npm run serve
+
+7. **Access the APP:**
+
+   Open your web browser and navigate to `http://localhost:8081`.
+    
    
