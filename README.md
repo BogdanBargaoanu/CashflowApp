@@ -48,7 +48,7 @@ Cashflow management app.
    ```bash
    npm run serve
 
-7. **Access the APP:**
+7. **Access the App:**
 
    Open your web browser and navigate to `http://localhost:8081`.
     
