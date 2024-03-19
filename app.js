@@ -41,6 +41,21 @@ db.connect((err) => {
   }
   else {
     console.log('Connected to database');
+    const createUsersTableQuery = `CREATE TABLE IF NOT EXISTS users (
+      idUsers int NOT NULL AUTO_INCREMENT,
+      username varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+      password varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+      PRIMARY KEY (idUsers)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci`;
+
+    db.query(createUsersTableQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log('Users table checked/created successfully.');
+      }
+    });
   }
 });
 

@@ -103,6 +103,14 @@ router.post('/addUser', function (req, res, next) {
     res.status(400).json({ error: 'The password must have at least 5 characters!' });
     return;
   }
+  if (req.body.username.length > 30) {
+    res.status(400).json({ error: 'The username must have at most 30 characters!' });
+    return;
+  }
+  if (req.body.password.length > 30) {
+    res.status(400).json({ error: 'The password must have at most 30 characters!' });
+    return;
+  }
 
   const hasUpperCase = /[A-Z]/.test(req.body.password); // regex test for uppercase
   const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(req.body.password); // regex test for special char
