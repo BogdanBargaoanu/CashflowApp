@@ -1,30 +1,78 @@
 <template>
   <div class="container-fluid">
     <form>
-    <h1 class="text-center">{{ msg }}</h1>
+      <h1 class="text-center">{{ msg }}</h1>
       <div class="mb-3">
         <label for="inputUsername" class="form-label">Username</label>
-        <input type="text" class="form-control" id="inputUsername">
+        <input v-model="username" type="text" class="form-control" id="inputUsername" required>
       </div>
       <div class="mb-3">
         <label for="inputPassword" class="form-label">Password</label>
-        <input type="password" class="form-control" id="inputPassword" aria-describedby="pwHelp">
+        <input v-model="password" type="password" class="form-control" id="inputPassword" aria-describedby="pwHelp"
+          required>
         <div id="pwHelp" class="form-text">We'll never share your password with anyone else.</div>
       </div>
       <!--<div class="mb-3 form-check">
         <input type="checkbox" class="form-check-input" id="exampleCheck1">
         <label class="form-check-label" for="exampleCheck1">Check me out</label>
       </div> -->
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button @click="login($event)" type="submit" class="btn btn-primary">Login</button>
     </form>
+
+
+
+
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
+      :class="{ 'show': showToast }" style="position: absolute; top: 0; right: 0;">
+      <div class="toast-header">
+        <strong class="me-auto">Notification</strong>
+        <button type="button" class="m1-2 mb-1 btn-close" @click="showToast = false"></button>
+      </div>
+      <div class="toast-body">
+        {{ toastMessage }}
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'UserLogin',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      username: '',
+      password: '',
+      showToast: false,
+      toastMessage: ''
+    };
+  },
+  methods: {
+    login(event) {
+      event.preventDefault();
+      axios.post('http://localhost:3000/users/login', {
+        username: this.username,
+        password: this.password
+      })
+        .then(response => {
+          if (response.data.success) {
+            // The login was successful
+          }
+        })
+        .catch(error => {
+          this.toastMessage = 'Invalid login: ' + error.response.data.message;
+          this.showToast = true;
+
+          setTimeout(() => {
+            this.showToast = false;
+          }, 5000);
+        });
+    }
   }
 }
 </script>

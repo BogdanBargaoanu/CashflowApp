@@ -44,7 +44,6 @@ router.get('/', function (req, res, next) {
  *     tags:
  *      - users
  *     description: Add a user.
- *     responses:
  *     requestBody:
  *       required: true
  *       content:
@@ -58,10 +57,11 @@ router.get('/', function (req, res, next) {
  *               password:
  *                 type: string
  *                 description: The password of the user.
+ *     responses:
  *       200:
- *         description: User added successfuly.
+ *         description: User added successfully.
  *         content:
- *           json:
+ *           application/json:
  *             schema:
  *               type: object
  *               properties:
@@ -70,7 +70,7 @@ router.get('/', function (req, res, next) {
  *       400:
  *         description: Error caused by an inappropriate input.
  *         content:
- *           json:
+ *           application/json:
  *             schema:
  *               type: object
  *               properties:
@@ -79,7 +79,7 @@ router.get('/', function (req, res, next) {
  *       500:
  *         description: Internal server error.
  *         content:
- *           json:
+ *           application/json:
  *             schema:
  *               type: object
  *               properties:
@@ -154,4 +154,89 @@ router.post('/addUser', function (req, res, next) {
     });
   });
 });
+
+/**
+ * @openapi
+ * /users/login:
+ *   post:
+ *     tags:
+ *      - users
+ *     description: Login a user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *       401:
+ *         description: Incorrect password.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       404:
+ *         description: User not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ */
+router.post('/login', function (req, res, next) {
+  const { username, password } = req.body;
+  const query = 'SELECT * FROM users WHERE username = ?';
+  req.db.query(query, [username], (err, results) => {
+    if (err) {
+      res.status(500).json({ success: false, message: err.message });
+      return;
+    }
+    if (results.length > 0) {
+      const user = results[0];
+      if (user.password == password) {
+        res.json({ success: true });
+      } else {
+        res.status(401).json({ success: false, message: 'Incorrect password' });
+      }
+    } else {
+      res.status(404).json({ success: false, message: 'User not found' });
+    }
+  });
+});
+
+
 module.exports = router;

@@ -1,10 +1,14 @@
 #content {
-    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(75, 14, 154, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(75, 14, 154, 1) 35%, rgb(0, 238, 255) 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+}
+
+.text-center {
+    text-shadow: 4px 4px 4px #1d1d1d7a;
 }
 
 form {
@@ -33,7 +37,7 @@ button[class="btn btn-primary"] {
     display: block;
     margin: 3rem auto;
     border-radius: 1.5rem;
-    background: linear-gradient(90deg, rgba(0, 212, 255, 1) 0%, rgba(75, 14, 154, 1) 35%, rgba(2, 0, 36, 1) 100%);
+    background: linear-gradient(90deg, rgb(0, 238, 255) 0%, rgba(75, 14, 154, 1) 35%, rgba(2, 0, 36, 1) 100%);
     transition: background-image 2s ease;
     z-index: 1;
     transition: box-shadow 1s;
@@ -46,7 +50,7 @@ button[class="btn btn-primary"]::before {
     right: 0;
     left: 0;
     bottom: 0;
-    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(75, 14, 154, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(75, 14, 154, 1) 35%, rgb(0, 238, 255) 100%);
     transition: opacity 0.5s linear;
     z-index: -1;
     opacity: 0;
