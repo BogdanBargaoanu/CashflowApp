@@ -1,6 +1,5 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <UserLogin msg="Welcome to Your Vue.js App"/>
+  <UserLogin msg="Login"/>
 </template>
 
 <script>

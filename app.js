@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+const cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -41,6 +42,21 @@ db.connect((err) => {
   }
   else {
     console.log('Connected to database');
+    const createUsersTableQuery = `CREATE TABLE IF NOT EXISTS users (
+      idUsers int NOT NULL AUTO_INCREMENT,
+      username varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+      password varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+      PRIMARY KEY (idUsers)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci`;
+
+    db.query(createUsersTableQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log('Users table checked/created successfully.');
+      }
+    });
   }
 });
 
@@ -52,13 +68,14 @@ app.use((req, res, next) => {
 
 const openapiSpecification = swaggerJsdoc(options);
 
-app.use('/', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+app.use('/api', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

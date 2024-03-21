@@ -1,58 +1,78 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="container-fluid">
+    <form>
+      <h1 class="text-center">{{ msg }}</h1>
+      <div class="mb-3">
+        <label for="inputUsername" class="form-label">Username</label>
+        <input v-model="username" type="text" class="form-control" id="inputUsername" required>
+      </div>
+      <div class="mb-3">
+        <label for="inputPassword" class="form-label">Password</label>
+        <input v-model="password" type="password" class="form-control" id="inputPassword" aria-describedby="pwHelp"
+          required>
+        <div id="pwHelp" class="form-text">We'll never share your password with anyone else.</div>
+      </div>
+      <!--<div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+      </div> -->
+      <button @click="login($event)" type="submit" class="btn btn-primary">Login</button>
+    </form>
+
+
+
+
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
+      :class="{ 'show': showToast }" style="position: absolute; top: 0; right: 0;">
+      <div class="toast-header">
+        <strong class="me-auto">Notification</strong>
+        <button type="button" class="m1-2 mb-1 btn-close" @click="showToast = false"></button>
+      </div>
+      <div class="toast-body">
+        {{ toastMessage }}
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'UserLogin',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      username: '',
+      password: '',
+      showToast: false,
+      toastMessage: ''
+    };
+  },
+  methods: {
+    login(event) {
+      event.preventDefault();
+      axios.post('http://localhost:3000/users/login', {
+        username: this.username,
+        password: this.password
+      })
+        .then(response => {
+          if (response.data.success) {
+            // The login was successful
+          }
+        })
+        .catch(error => {
+          this.toastMessage = 'Invalid login: ' + error.response.data.message;
+          this.showToast = true;
+
+          setTimeout(() => {
+            this.showToast = false;
+          }, 5000);
+        });
+    }
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>

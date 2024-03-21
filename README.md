@@ -39,7 +39,7 @@ Cashflow management app.
 
 5. **Access the API:**
 
-   Open your web browser and navigate to `http://localhost:3000`.
+   Open your web browser and navigate to `http://localhost:3000/api`.
 
 6. **Start the app:**
 

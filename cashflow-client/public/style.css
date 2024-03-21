@@ -1,0 +1,65 @@
+#content {
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(75, 14, 154, 1) 35%, rgb(0, 238, 255) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.text-center {
+    text-shadow: 4px 4px 4px #1d1d1d7a;
+}
+
+form {
+    min-width: 450px; /* adjust as needed */
+    width: 40%;
+    margin: auto;
+    background-color: white;
+    border-radius: 2rem;
+    padding: 2rem;
+    box-shadow: 25px 25px 25px 1px #0000007a;
+}
+
+.form-label {
+    margin: 1.5rem 0 0 0;
+    font-size: 1.5rem;
+}
+
+.form-control {
+    width: 75% !important;
+    margin: 0 auto;
+}
+
+button[class="btn btn-primary"] {
+    position: relative;
+    width: 75%;
+    display: block;
+    margin: 3rem auto;
+    border-radius: 1.5rem;
+    background: linear-gradient(90deg, rgb(0, 238, 255) 0%, rgba(75, 14, 154, 1) 35%, rgba(2, 0, 36, 1) 100%);
+    transition: background-image 2s ease;
+    z-index: 1;
+    transition: box-shadow 1s;
+}
+
+button[class="btn btn-primary"]::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(75, 14, 154, 1) 35%, rgb(0, 238, 255) 100%);
+    transition: opacity 0.5s linear;
+    z-index: -1;
+    opacity: 0;
+    border-radius: 1.5rem;
+}
+
+button[class="btn btn-primary"]:hover::before {
+    opacity: 1;
+    transition: opacity 0.5s linear;
+    border-radius: 1.5rem;
+}
+
