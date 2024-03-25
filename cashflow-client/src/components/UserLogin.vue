@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <form>
-      <h1 class="text-center">{{ msg }}</h1>
+      <h1 class="text-center">Login</h1>
       <div class="mb-3">
         <label for="inputUsername" class="form-label">Username</label>
         <input v-model="username" type="text" class="form-control" id="inputUsername" required>
@@ -63,7 +63,7 @@ export default {
           if (response.data.success) {
             // The login was successful
             localStorage.setItem('user-token', response.data.token);
-            this.$router.push('/registration.html');
+            this.$router.push('/register');
           }
         })
         .catch(error => {

@@ -1,15 +1,19 @@
 <template>
   <UserLogin msg="Login"/>
+  <div id="app">
+    <nav>
+      <router-link to="/login"></router-link>
+      <router-link to="/register"></router-link>
+    </nav>
+    <!-- This is where the content of the current route will be displayed -->
+    <router-view />
+    </div>
 </template>
 
 <script>
-import UserLogin from './components/UserLogin.vue'
 
 export default {
   name: 'App',
-  components: {
-    UserLogin
-  }
 }
 </script>
 
