@@ -62,6 +62,8 @@ export default {
         .then(response => {
           if (response.data.success) {
             // The login was successful
+            localStorage.setItem('user-token', response.data.token);
+            this.$router.push('/registration.html');
           }
         })
         .catch(error => {
