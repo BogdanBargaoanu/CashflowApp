@@ -30,9 +30,9 @@ Cashflow management app.
     ```
     <i> Note - dependencies should also be installed for the cashflow-client app. </i>
 
-4. **Start the API:**
+4. **Start the server app:**
 
-   Run the following command in your terminal to start the API:
+   Run the following command in your terminal to start the server app:
 
    ```bash
    npm start
