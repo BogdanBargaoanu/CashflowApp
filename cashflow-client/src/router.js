@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import UserLogin from './UserLogin.vue';
+import UserLogin from './components/UserLogin.vue';
+import RegistrationPage from './components/RegistrationPage.vue';
 
 const routes = [
-  { path: '/login', component: UserLogin }
+  { path: '/', redirect: '/login' },
+  { path: '/login', component: UserLogin },
+  { path: '/register', component: RegistrationPage}
   // { path: '/dashboard', component: Dashboard, meta: { requiresAuth: true } } // Add your Dashboard route
 ];
 
