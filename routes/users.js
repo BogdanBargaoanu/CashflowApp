@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const jwt = require('jsonwebtoken');
 
 /**
  * @openapi
@@ -183,19 +184,10 @@ router.post('/addUser', function (req, res, next) {
  *               properties:
  *                 success:
  *                   type: boolean
+ *                 token:
+ *                   type: string
  *       401:
  *         description: Incorrect password.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 message:
- *                   type: string
- *       404:
- *         description: User not found.
  *         content:
  *           application/json:
  *             schema:
@@ -228,12 +220,14 @@ router.post('/login', function (req, res, next) {
     if (results.length > 0) {
       const user = results[0];
       if (user.password == password) {
-        res.json({ success: true });
+        const token = jwt.sign({ id: user.id }, 'cashflow-key', { expiresIn: '1h' });
+        //res.cookie('token', token, { httpOnly: true });
+        res.json({ success: true, token: token});
       } else {
-        res.status(401).json({ success: false, message: 'Incorrect password' });
+        res.status(401).json({ success: false, message: 'Incorrect login details' });
       }
     } else {
-      res.status(404).json({ success: false, message: 'User not found' });
+      res.status(401).json({ success: false, message: 'Incorrect login details' });
     }
   });
 });
