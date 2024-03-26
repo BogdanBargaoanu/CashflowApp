@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <form>
+    <form class="main-form">
       <h1 class="text-center">Login</h1>
       <div class="mb-3">
         <label for="inputUsername" class="form-label">Username</label>
@@ -17,6 +17,7 @@
         <label class="form-check-label" for="exampleCheck1">Check me out</label>
       </div> -->
       <button @click="login($event)" type="submit" class="btn btn-primary">Login</button>
+      <p class="create-account-info">Don't have an account? <router-link to="/register">Register</router-link></p>
     </form>
 
 
