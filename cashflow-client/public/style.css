@@ -4,6 +4,7 @@
     --background-color2: rgba(75, 14, 154, 1);
     --background-color3: rgb(0, 238, 255);
     --form-background-color: rgb(255, 255, 255);
+    --heading-color: rgb(255, 255, 255);
 }
 
 * {
@@ -12,7 +13,6 @@
     padding: 0;
     font-family: "Poppins" , sans-serif;
 }
-
 
 #content {
     background: linear-gradient(60deg, var(--background-color1) 0%, var(--background-color2) 35%, var(--background-color3) 100%);
@@ -90,3 +90,27 @@ button[class="btn btn-primary"]:hover::before {
       opacity: 1;
     }
   }
+
+/* Dashboard styles */
+.dashboard {
+    display: flex;
+    width: 90vw;
+    height: 65vh;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+.dashboard-heading {
+    width: 100%;
+    color: var(--heading-color);
+    text-shadow: 6px 6px 6px rgba(14, 14, 14, 0.534);
+    animation: slide-up-fade-in 0.5s ease;
+}
+.content-box {
+    background-color: white;
+}
+
+.container {
+    width: 10%;
+    height: 10%;
+    border-radius: 2rem;
+}
