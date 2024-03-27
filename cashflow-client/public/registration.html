@@ -20,6 +20,31 @@
         </div>
         <button type="submit" class="btn btn-primary">Register</button>
     </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.getElementById('registration').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+            axios.post('http://localhost:3000/users/register', jsonData)
+            .then(response => {
+                if (response.data.success) {
+                    window.location.href = '/login';
+                } else {
+                    console.error('Registration failed:', response.data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Network error:', error);
+            });
+        });
+    </script>
     
 </body>
 </html>
