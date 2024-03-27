@@ -4,7 +4,7 @@ import RegistrationPage from './components/RegistrationPage.vue';
 import DashboardPage from './components/DashboardPage.vue';
 
 const routes = [
-  { path: '/', redirect: '/login' },
+  { path: '/', redirect: '/dashboard' },
   { path: '/login', component: UserLogin },
   { path: '/register', component: RegistrationPage},
   { path: '/dashboard', component: DashboardPage, meta: { requiresAuth: true } }

@@ -1,14 +1,16 @@
 <template>
     <h1 class="text-center dashboard-heading">Dashboard</h1>
     <div class="container-fluid dashboard">
-        <div class="container content-box">
+        <div class="content-box cb1">current-info
         </div>
-        <div class="container content-box">
+        <div class="content-box cb2">
+            <img src="../assets/dashboard-img/chart-icon.png" alt="chart-icon" class="chart-icon">
         </div>
-        <div class="container content-box">
+        <div class="content-box cb3">cashflow
         </div>
-        <div class="container content-box">
+        <div class="content-box cb4">categories-graph
         </div>
+        <button class="btn-logout">Logout</button>
     </div>
 </template>
 
