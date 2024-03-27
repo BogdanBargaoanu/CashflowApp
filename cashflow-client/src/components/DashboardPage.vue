@@ -10,12 +10,18 @@
         </div>
         <div class="content-box cb4">categories-graph
         </div>
-        <button class="btn-logout">Logout</button>
+        <button @click="logout()" class="btn-logout">Logout</button>
     </div>
 </template>
 
 <script>
 export default {
     name: 'DashboardPage',
+    methods: {
+        logout() {
+            localStorage.removeItem('user-token');
+            this.$router.push('/login');
+        }
+    }
 }
 </script>
