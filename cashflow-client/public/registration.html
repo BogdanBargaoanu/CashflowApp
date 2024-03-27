@@ -22,28 +22,49 @@
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <script>
-        document.getElementById('registration').addEventListener('submit', function(event) {
-            event.preventDefault();
+    
+import axios from 'axios';
 
-            const formData = new FormData(this);
-            const jsonData = {};
-            formData.forEach((value, key) => {
-                jsonData[key] = value;
-            });
-
-            axios.post('http://localhost:3000/users/register', jsonData)
-            .then(response => {
-                if (response.data.success) {
-                    window.location.href = '/login';
-                } else {
-                    console.error('Registration failed:', response.data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Network error:', error);
-            });
+export default {
+  name: 'UserRegister',
+  data() {
+    return {
+      username: '',
+      password: '',
+      showToast: false,
+      toastMessage: ''
+    };
+  },
+  methods: {
+    register(event) {
+      event.preventDefault();
+      axios.post('http://localhost:3000/users/register', {
+        username: this.username,
+        password: this.password
+      })
+        .then(response => {
+          if (response.data.success) {
+           
+            this.toastMessage = 'Registration successful!';
+            this.showToast = true;
+           
+            this.$router.push('/login'); 
+          } else {
+            
+            this.toastMessage = 'Registration failed: ' + response.data.message;
+            this.showToast = true;
+          }
+        })
+        .catch(error => {
+          this.toastMessage = 'Error during registration: ' + error.message;
+          this.showToast = true;
         });
+    }
+  }
+}
+
     </script>
     
 </body>
