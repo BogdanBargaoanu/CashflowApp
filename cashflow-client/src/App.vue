@@ -5,6 +5,7 @@
       <router-link to="/login"></router-link>
       <router-link to="/register"></router-link>
       <router-link to="/dashboard"></router-link>
+      <router-link to="/cashflow-log"></router-link>
     </nav>
     <!-- This is where the content of the current route will be displayed -->
     <router-view />

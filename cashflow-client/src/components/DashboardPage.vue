@@ -6,7 +6,7 @@
         <div class="content-box cb2">
             <img src="../assets/dashboard-img/chart-icon.png" alt="chart-icon" class="chart-icon">
         </div>
-        <div class="content-box cb3">cashflow
+        <div @click="cashflowLog()" class="content-box cb3">cashflow
         </div>
         <div class="content-box cb4">categories-graph
         </div>
@@ -21,6 +21,9 @@ export default {
         logout() {
             localStorage.removeItem('user-token');
             this.$router.push('/login');
+        },
+        cashflowLog() {
+            this.$router.push('/cashflow-log');
         }
     }
 }
