@@ -1,21 +1,26 @@
 <template>
     <div id="cashflow-log">
         <div class="accordion" id="accordionExample">
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="headingOne">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          Collapsible Group Item #1
-        </button>
-      </h2>
-      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-        <div class="accordion-body">
-          <strong>This is the first item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Collapsible Group Item #1
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <select class="name-select" v-model="selectedName">
+                            <option v-for="entity in entities" :key="entity.idEntities">{{ entity.name }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
-    </div>
-  </div>
         <ul class="cashflow-list">
-            
+
             <li v-for="(log, index) in cashflowLog" :key="index">
                 <div class="cashflow-row">
                     <div class="cashflow-log-id">{{ log.idcashflowLog }}</div>
@@ -37,7 +42,8 @@ export default {
     name: 'CashFlowLog',
     data() {
         return {
-            cashflowLog: []
+            cashflowLog: [],
+            entities: []
         }
     },
     created() {
@@ -49,6 +55,14 @@ export default {
         })
             .then(response => {
                 this.cashflowLog = response.data;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        axios.get('http://localhost:3000/entities')
+            .then(response => {
+                this.entities = response.data;
             })
             .catch(error => {
                 console.error(error);
