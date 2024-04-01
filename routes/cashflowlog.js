@@ -61,7 +61,7 @@ router.get('/', function (req, res, next) {
         res.status(401).json({ error: 'Invalid token' });
         return;
     }
-    const query = `SELECT cashflowlog.idcashflowLog, entities.name, cashflowlog.type, cashflowlog.value, cashflowlog.currency, cashflowlog.description FROM cashflowlog
+    const query = `SELECT cashflowlog.idcashflowLog, entities.name, cashflowlog.type, cashflowlog.value, cashflowlog.currency, cashflowlog.description, cashflowlog.date FROM cashflowlog
   INNER JOIN entities ON cashflowlog.idEntity = entities.idEntities
   WHERE cashflowlog.idUser = ?`;
     req.db.query(query, [userId], (err, result) => {

@@ -64,6 +64,7 @@ db.connect((err) => {
       type VARCHAR(45) NULL,
       value FLOAT NOT NULL,
       currency VARCHAR(45) NOT NULL,
+      date DATETIME NOT NULL,
       PRIMARY KEY (idcashflowLog),
       INDEX FK_Users_idx (idUser ASC) VISIBLE,
       INDEX FK_Entities_idx (idEntity ASC) VISIBLE,
