@@ -1,14 +1,14 @@
 <template>
     <div id="cashflow-log">
         <div class="accordion" id="accordionExample">
-            <div class="accordion-item">
+            <div v-for="log in cashflowLog" :key="log.idcashflowLog" class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        :data-bs-target="'#collapse' + log.idcashflowLog" aria-expanded="false" :aria-controls="'collapse' + log.idcashflowLog">
                         Collapsible Group Item #1
                     </button>
                 </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                <div :id="'collapse' + log.idcashflowLog" class="accordion-collapse collapse" :aria-labelledby="'heading' + log.idcashflowLog"
                     data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <select class="name-select" v-model="selectedName">
