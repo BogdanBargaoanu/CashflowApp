@@ -8,6 +8,8 @@
     --box-shadow-color: #0000007a;
     --logout-color: rgb(255, 81, 81);
     --logout-color-text: rgb(151, 0, 0);
+    --positive-cashflow: rgb(0, 194, 0);
+    --negative-cashflow: rgb(160, 0, 0);
 }
 
 * {
@@ -187,4 +189,3 @@ button[class="btn btn-primary"]:hover::before {
     margin: 0;
     padding: 0;
 }
-
