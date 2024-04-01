@@ -7,10 +7,13 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var cashflowlogRouter = require('./routes/cashflowlog');
 
 var app = express();
 
-
+app.use(cors({
+  exposedHeaders: ['Authorization']
+}));
 // swagger setup
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
@@ -59,6 +62,8 @@ db.connect((err) => {
       description VARCHAR(500) NULL,
       idEntity INT NOT NULL,
       type VARCHAR(45) NULL,
+      value FLOAT NOT NULL,
+      currency VARCHAR(45) NOT NULL,
       PRIMARY KEY (idcashflowLog),
       INDEX FK_Users_idx (idUser ASC) VISIBLE,
       INDEX FK_Entities_idx (idEntity ASC) VISIBLE,
@@ -123,6 +128,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/cashflowlog', cashflowlogRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

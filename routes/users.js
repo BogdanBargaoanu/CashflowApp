@@ -220,7 +220,7 @@ router.post('/login', function (req, res, next) {
     if (results.length > 0) {
       const user = results[0];
       if (user.password == password) {
-        const token = jwt.sign({ id: user.id }, 'cashflow-key', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.idUsers }, 'cashflow-key', { expiresIn: '1h' });
         //res.cookie('token', token, { httpOnly: true });
         res.json({ success: true, token: token});
       } else {
