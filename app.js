@@ -53,6 +53,25 @@ db.connect((err) => {
       name VARCHAR(100) NULL,
       isUser TINYINT(1) NULL,
       PRIMARY KEY (idEntities))`;
+    const createCashflowLogTableQuery = `CREATE TABLE IF NOT EXISTS cashflowLog (
+      idcashflowLog INT NOT NULL AUTO_INCREMENT,
+      idUser INT NOT NULL,
+      description VARCHAR(500) NULL,
+      idEntity INT NOT NULL,
+      type VARCHAR(45) NULL,
+      PRIMARY KEY (idcashflowLog),
+      INDEX FK_Users_idx (idUser ASC) VISIBLE,
+      INDEX FK_Entities_idx (idEntity ASC) VISIBLE,
+      CONSTRAINT FK_Users
+        FOREIGN KEY (idUser)
+        REFERENCES cashflowapp.users (idUsers)
+        ON DELETE RESTRICT
+        ON UPDATE NO ACTION,
+      CONSTRAINT FK_Entities
+        FOREIGN KEY (idEntity)
+        REFERENCES cashflowapp.entities (idEntities)
+        ON DELETE RESTRICT
+        ON UPDATE NO ACTION)`
     db.query(createUsersTableQuery, (err, result) => {
       if (err) {
         console.log(err);
@@ -67,6 +86,14 @@ db.connect((err) => {
       }
       else {
         console.log('Entities table checked/created successfully.');
+      }
+    })
+    db.query(createCashflowLogTableQuery, (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log('Cashflow log table checked/created successfully.');
       }
     })
   }
