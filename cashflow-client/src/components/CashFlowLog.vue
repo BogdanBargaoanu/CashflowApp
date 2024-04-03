@@ -74,13 +74,14 @@
                                 @change="inputChanging()">
                         </div>
                         <transition name="fade">
-                        <button v-if="showButton" @click="updateCashflowLog(log.idcashflowLog)" class="btn btn-primary">Update</button>
+                            <button v-if="showButton" @click="updateCashflowLog(log.idcashflowLog)"
+                                class="btn btn-primary">Update</button>
                         </transition>
                     </div>
                 </div>
             </div>
-
         </div>
+        <button class="btn-insert">Insert</button>
     </div>
     <button @click="logout()" class="btn-logout">Logout</button>
 
@@ -172,7 +173,9 @@ export default {
     animation-fill-mode: backwards;
     /* This makes the animation delay apply to the start of the animation, not the end */
 }
-.fade-enter-from, .fade-leave-to {
+
+.fade-enter-from,
+.fade-leave-to {
     position: relative;
     width: 75%;
     display: block;
@@ -183,7 +186,8 @@ export default {
     opacity: 0;
 }
 
-.fade-enter-to, .fade-leave-from {
+.fade-enter-to,
+.fade-leave-from {
     position: relative;
     width: 75%;
     display: block;
@@ -194,7 +198,8 @@ export default {
     opacity: 1;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
     position: relative;
     width: 75%;
     display: block;
@@ -204,5 +209,4 @@ export default {
     z-index: 1;
     transition: opacity 0.5s ease-in-out;
 }
-
 </style>

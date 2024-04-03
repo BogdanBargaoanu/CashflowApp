@@ -8,8 +8,10 @@
     --box-shadow-color: #0000007a;
     --logout-color: rgb(255, 81, 81);
     --logout-color-text: rgb(151, 0, 0);
-    --positive-cashflow: rgb(0, 194, 0);
-    --negative-cashflow: rgb(160, 0, 0);
+    --insert-button-color1: rgb(6, 146, 6);
+    --inser-button-color2: rgb(34, 255, 107);
+    --insert-button-text: rgb(9, 75, 0);
+    --delete-button-color: rgb(160, 0, 0);
 }
 
 * {
@@ -92,6 +94,8 @@ button[class="btn btn-primary"]:hover::before {
     transition: opacity 0.5s linear;
     border-radius: 1.5rem;
 }
+
+
 
 @keyframes slide-up-fade-in {
     0% {
@@ -192,3 +196,29 @@ button[class="btn btn-primary"]:hover::before {
     flex-wrap: wrap;
 }
 */
+
+/* Cashflow log styles */
+.btn-insert {
+    position: fixed;
+    top: 80%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    width: 20%;
+    height: 7%;
+    background: linear-gradient(var(--insert-button-color1), var(--inser-button-color2));
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--insert-button-text);
+    border-radius: 1rem;
+    animation: slide-up-fade-in 1.5s ease;
+    transition: transform 0.5s ease;
+    border: none;
+    font-size: 1rem;
+    box-shadow: 7px 7px 7px 1px var(--box-shadow-color);
+}
+
+.btn-insert:hover {
+    transform: translateY(-5px);
+}
