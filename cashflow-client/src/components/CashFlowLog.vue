@@ -168,7 +168,6 @@ export default {
         },
         inputChanging() {
             this.showButton = true;
-            console.log(this.cashflowLog.date);
         }
     }
 }
