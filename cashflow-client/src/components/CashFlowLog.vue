@@ -69,7 +69,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
                             </div>
-                            <input type="date" class="date-input form-control" aria-label="Value"
+                            <input type="datetime-local" class="date-input form-control" aria-label="Value"
                                 aria-describedby="inputGroup-sizing-default" v-model="log.date"
                                 @change="inputChanging()">
                         </div>
@@ -168,6 +168,7 @@ export default {
         },
         inputChanging() {
             this.showButton = true;
+            console.log(this.cashflowLog.date);
         }
     }
 }
