@@ -33,6 +33,10 @@ const jwt = require('jsonwebtoken');
  *                     type: string
  *                   description:
  *                     type: string
+ *                   date:
+ *                    type: string
+ *                   identity:
+ *                    type: string
  *       401:
  *         description: Unauthorized. No authorization header or invalid token.
  *       500:
@@ -61,7 +65,7 @@ router.get('/', function (req, res, next) {
         res.status(401).json({ error: 'Invalid token' });
         return;
     }
-    const query = `SELECT cashflowlog.idcashflowLog, entities.name, cashflowlog.type, cashflowlog.value, cashflowlog.currency, cashflowlog.description, cashflowlog.date FROM cashflowlog
+    const query = `SELECT cashflowlog.idcashflowLog, entities.name, cashflowlog.type, cashflowlog.value, cashflowlog.currency, cashflowlog.description, cashflowlog.date, cashflowlog.identity FROM cashflowlog
   INNER JOIN entities ON cashflowlog.idEntity = entities.idEntities
   WHERE cashflowlog.idUser = ? ORDER BY cashflowlog.date DESC;`;
     req.db.query(query, [userId], (err, result) => {

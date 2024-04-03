@@ -1,8 +1,9 @@
 <template>
     <div id="cashflow-log">
-        <h1 class="text-center cashflowlog-heading">Cashflow</h1>
-        <div class="accordion" id="accordionExample">
-            <div v-for="(log, index) in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element" :style="{ animationDelay: index/4 + 's' }">
+        <h1 class="text-center cashflowlog-heading">Cashflow - {{ }}</h1>
+        <div class="accordion" id="accordionCashflow">
+            <div v-for="(log, index) in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element"
+                :style="{ animationDelay: index / 4 + 's' }">
                 <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         :data-bs-target="'#collapse' + log.idcashflowLog" aria-expanded="false"
@@ -15,10 +16,11 @@
                     </button>
                 </h2>
                 <div :id="'collapse' + log.idcashflowLog" class="accordion-collapse collapse"
-                    :aria-labelledby="'heading' + log.idcashflowLog" data-bs-parent="#accordionExample">
+                    :aria-labelledby="'heading' + log.idcashflowLog" data-bs-parent="#accordionCashflow">
                     <div class="accordion-body">
-                        <select class="name-select" v-model="selectedName">
-                            <option v-for="entity in entities" :key="entity.idEntities">{{ entity.name }}</option>
+                        <select class="name-select" @change="entityChanging">
+                            <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities" :selected="entity.idEntities == log.identity">{{
+            entity.name }}</option>
                         </select>
                     </div>
                 </div>
@@ -50,7 +52,7 @@ export default {
             cashflowLog: [],
             entities: [],
             showToast: false,
-            toastMessage: ''
+            toastMessage: '',
         }
     },
     created() {
@@ -82,11 +84,15 @@ export default {
             .catch(error => {
                 console.error(error);
             });
+        this.cashflowLog = this.cashflowLog.map(log => ({ ...log, selectedEntityId: log.idEntities }));
     },
     methods: {
         logout() {
             localStorage.removeItem('user-token');
             this.$router.push('/login');
+        },
+        entityChanging() {
+            console.log(this.selectedEntityId);
         }
     }
 }
@@ -104,9 +110,11 @@ export default {
     align-items: center;
     height: 80vh;
 }
+
 .cashflow-element {
     margin-bottom: 10px;
     animation: slide-up-fade-in 1s ease;
-    animation-fill-mode: backwards; /* This makes the animation delay apply to the start of the animation, not the end */
+    animation-fill-mode: backwards;
+    /* This makes the animation delay apply to the start of the animation, not the end */
 }
 </style>
