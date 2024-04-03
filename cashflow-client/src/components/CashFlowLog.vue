@@ -82,7 +82,7 @@
             </div>
         </div>
         <button type="button" class="btn-insert" data-bs-toggle="modal" data-bs-target="#insertModal">Insert</button>
-        
+
         <!-- Modal -->
         <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="InsertPopup" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -95,8 +95,8 @@
                         
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn-cashflow-close" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn-save">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -228,4 +228,5 @@ export default {
     z-index: 1;
     transition: opacity 0.5s ease-in-out;
 }
+
 </style>
