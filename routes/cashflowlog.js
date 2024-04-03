@@ -63,7 +63,7 @@ router.get('/', function (req, res, next) {
     }
     const query = `SELECT cashflowlog.idcashflowLog, entities.name, cashflowlog.type, cashflowlog.value, cashflowlog.currency, cashflowlog.description, cashflowlog.date FROM cashflowlog
   INNER JOIN entities ON cashflowlog.idEntity = entities.idEntities
-  WHERE cashflowlog.idUser = ?`;
+  WHERE cashflowlog.idUser = ? ORDER BY cashflowlog.date DESC;`;
     req.db.query(query, [userId], (err, result) => {
         if (err) {
             res.status(500).json({ error: err.message });

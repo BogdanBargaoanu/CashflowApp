@@ -23,6 +23,7 @@
     margin: 0 !important;
     padding: 0;
     width: 90%;
+    height: 90%;
     margin: auto !important;
 }
 
@@ -111,11 +112,12 @@ button[class="btn btn-primary"]:hover::before {
     width: 90vw;
     height: 80vh;
 }
-.dashboard-heading {
+.dashboard-heading, .cashflowlog-heading {
     width: 100%;
     color: var(--heading-color);
     text-shadow: 6px 6px 6px rgba(14, 14, 14, 0.534);
     animation: slide-up-fade-in 0.5s ease;
+    margin-bottom: 20px;
 }
 .content-box {
     background-color: white;

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid login-container">
     <form class="main-form">
       <h1 class="text-center">Login</h1>
       <div class="mb-3">
@@ -79,3 +79,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+</style>
