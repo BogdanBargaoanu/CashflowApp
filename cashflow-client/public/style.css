@@ -169,11 +169,15 @@ button[class="btn btn-primary"]:hover::before {
     animation: slide-up-fade-in 2s ease;
     transition: transform 0.5s ease;
 }
-.chart-icon {
+.chart-icon, .cashflow-log-icon, .current-info-icon, .categories-graph-icon {
     position: sticky;
     float: left;
     margin-left: 1%;
     width: 100px;
+}
+
+.categories-graph-icon {
+    margin-top: 0.5%;
 }
 
 .btn-logout {
