@@ -2,7 +2,7 @@
     <div id="cashflow-log">
         <h1 class="text-center cashflowlog-heading">Cashflow</h1>
         <div class="accordion" id="accordionExample">
-            <div v-for="log in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element">
+            <div v-for="(log, index) in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element" :style="{ animationDelay: index/4 + 's' }">
                 <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         :data-bs-target="'#collapse' + log.idcashflowLog" aria-expanded="false"
@@ -26,6 +26,7 @@
 
         </div>
     </div>
+    <button @click="logout()" class="btn-logout">Logout</button>
 
 
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
@@ -83,7 +84,10 @@ export default {
             });
     },
     methods: {
-
+        logout() {
+            localStorage.removeItem('user-token');
+            this.$router.push('/login');
+        }
     }
 }
 </script>
@@ -92,11 +96,17 @@ export default {
 .app-global {
     height: 90%;
 }
+
 #cashflow-log cashflow-element {
     width: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 80vh;
+}
+.cashflow-element {
+    margin-bottom: 10px;
+    animation: slide-up-fade-in 1s ease;
+    animation-fill-mode: backwards; /* This makes the animation delay apply to the start of the animation, not the end */
 }
 </style>
