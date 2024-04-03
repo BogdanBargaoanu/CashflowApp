@@ -1,6 +1,6 @@
 <template>
     <div id="cashflow-log">
-        <h1 class="text-center cashflowlog-heading">Cashflow - {{ }}</h1>
+        <h1 class="text-center cashflowlog-heading">Cashflow</h1>
         <div class="accordion" id="accordionCashflow">
             <div v-for="(log, index) in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element"
                 :style="{ animationDelay: index / 4 + 's' }">
@@ -8,20 +8,72 @@
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         :data-bs-target="'#collapse' + log.idcashflowLog" aria-expanded="false"
                         :aria-controls="'collapse' + log.idcashflowLog">
-                        Transaction ID: {{ log.idcashflowLog }} &nbsp; <b
-                            :class="{ 'text-danger': log.value < 0, 'text-success': log.value >= 0 }">{{ log.type }}</b>
+                        Transaction ID: {{ log.idcashflowLog }} &nbsp;<b
+                            :class="{ 'text-danger': log.type == 'Expense', 'text-success': log.type == 'Income' }">{{
+                log.type }}</b>
                         &nbsp;
-                        Name: {{ log.name }} &nbsp; Value: {{ log.value }} &nbsp; Currency: {{ log.currency }} &nbsp;
+                        Name: {{ log.name }} Value: {{ log.value }} Currency: {{ log.currency }}
                         Date: {{ log.date }}
                     </button>
                 </h2>
                 <div :id="'collapse' + log.idcashflowLog" class="accordion-collapse collapse"
                     :aria-labelledby="'heading' + log.idcashflowLog" data-bs-parent="#accordionCashflow">
                     <div class="accordion-body">
-                        <select class="name-select" @change="entityChanging">
-                            <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities" :selected="entity.idEntities == log.identity">{{
-            entity.name }}</option>
-                        </select>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="entityName">Name</label>
+                            </div>
+                            <select id="entityName" class="name-select form-control" aria-label="Name"
+                                aria-describedby="inputGroup-sizing-default" v-model="log.identity"
+                                @change="inputChanging()">
+                                <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
+                                    {{
+                entity.name }}</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="typeName">Type</label>
+                            </div>
+                            <select id="typeName" class="type-select form-control" aria-label="Type"
+                                aria-describedby="inputGroup-sizing-default" v-model="log.type"
+                                @change="inputChanging()">
+                                <option value="Income">Income</option>
+                                <option value="Expense">Expense</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Value</span>
+                            </div>
+                            <input type="number" class="value-input form-control" aria-label="Value"
+                                aria-describedby="inputGroup-sizing-default" v-model="log.value"
+                                @change="inputChanging()">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="currencyName">Currency</label>
+                            </div>
+                            <select id="currencyName" class="currency-select form-control" aria-label="Currency"
+                                aria-describedby="inputGroup-sizing-default" v-model="log.currency"
+                                @change="inputChanging()">
+                                <option value="RON">RON</option>
+                                <option value="EUR">EUR</option>
+                                <option value="USD">USD</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
+                            </div>
+                            <input type="date" class="date-input form-control" aria-label="Value"
+                                aria-describedby="inputGroup-sizing-default" v-model="log.date"
+                                @change="inputChanging()">
+                        </div>
+                        <button v-if="showButton" @click="updateCashflowLog(log.idcashflowLog)" class="btn btn-primary">Update</button>
                     </div>
                 </div>
             </div>
@@ -53,6 +105,7 @@ export default {
             entities: [],
             showToast: false,
             toastMessage: '',
+            showButton: false,
         }
     },
     created() {
@@ -91,8 +144,8 @@ export default {
             localStorage.removeItem('user-token');
             this.$router.push('/login');
         },
-        entityChanging() {
-            console.log(this.selectedEntityId);
+        inputChanging() {
+            this.showButton = true;
         }
     }
 }
