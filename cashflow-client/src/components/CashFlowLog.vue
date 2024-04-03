@@ -73,7 +73,9 @@
                                 aria-describedby="inputGroup-sizing-default" v-model="log.date"
                                 @change="inputChanging()">
                         </div>
+                        <transition name="fade">
                         <button v-if="showButton" @click="updateCashflowLog(log.idcashflowLog)" class="btn btn-primary">Update</button>
+                        </transition>
                     </div>
                 </div>
             </div>
@@ -87,7 +89,7 @@
         :class="{ 'show': showToast }" style="position: absolute; top: 0; right: 0;">
         <div class="toast-header">
             <strong class="me-auto">Notification</strong>
-            <button type="button" class="m1-2 mb-1 btn-close" @click="showToast = false"></button>
+            <button type="button" class="m1-2 mb-1 btn-close fade-in" @click="showToast = false"></button>
         </div>
         <div class="toast-body">
             {{ toastMessage }}
@@ -170,4 +172,37 @@ export default {
     animation-fill-mode: backwards;
     /* This makes the animation delay apply to the start of the animation, not the end */
 }
+.fade-enter-from, .fade-leave-to {
+    position: relative;
+    width: 75%;
+    display: block;
+    margin: 3rem auto 2rem auto;
+    border-radius: 1.5rem;
+    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+    z-index: 1;
+    opacity: 0;
+}
+
+.fade-enter-to, .fade-leave-from {
+    position: relative;
+    width: 75%;
+    display: block;
+    margin: 3rem auto 2rem auto;
+    border-radius: 1.5rem;
+    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+    z-index: 1;
+    opacity: 1;
+}
+
+.fade-enter-active, .fade-leave-active {
+    position: relative;
+    width: 75%;
+    display: block;
+    margin: 3rem auto 2rem auto;
+    border-radius: 1.5rem;
+    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+    z-index: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
 </style>
