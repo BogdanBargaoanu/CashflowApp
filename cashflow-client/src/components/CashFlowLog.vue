@@ -4,6 +4,8 @@
         <div class="accordion" id="accordionCashflow">
             <div v-for="(log, index) in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element"
                 :style="{ animationDelay: index / 4 + 's' }">
+
+                <!-- ACCORDATION INFO -->
                 <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         :data-bs-target="'#collapse' + log.idcashflowLog" aria-expanded="false"
@@ -16,9 +18,13 @@
                         Date: {{ log.date }}
                     </button>
                 </h2>
+
+                <!-- ACCORDATION BODY COLLAPSED -->
                 <div :id="'collapse' + log.idcashflowLog" class="accordion-collapse collapse"
                     :aria-labelledby="'heading' + log.idcashflowLog" data-bs-parent="#accordionCashflow">
                     <div class="accordion-body">
+
+                        <!-- ENTITY -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="entityName">Name</label>
@@ -32,6 +38,7 @@
                             </select>
                         </div>
 
+                        <!-- TYPE -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="typeName">Type</label>
@@ -43,6 +50,8 @@
                                 <option value="Expense">Expense</option>
                             </select>
                         </div>
+
+                        <!-- VALUE -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Value</span>
@@ -52,6 +61,7 @@
                                 @change="inputChanging()">
                         </div>
 
+                        <!-- CURRENCY -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="currencyName">Currency</label>
@@ -65,6 +75,7 @@
                             </select>
                         </div>
 
+                        <!-- DATE -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
@@ -83,7 +94,7 @@
         </div>
         <button type="button" class="btn-insert" data-bs-toggle="modal" data-bs-target="#insertModal">Insert</button>
 
-        <!-- Modal -->
+        <!-- MODAL POPUP -->
         <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="InsertPopup" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -92,11 +103,69 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        
+
+                        <!-- ENTITY INSERT -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="entityNameInsert">Name</label>
+                            </div>
+                            <select id="entityNameInsert" class="name-select form-control" aria-label="Name"
+                                aria-describedby="inputGroup-sizing-default" v-model="idEntityInsert">
+                                <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
+                                    {{
+                entity.name }}</option>
+                            </select>
+                        </div>
+
+                        <!-- TYPE INSERT -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="typeNameInsert">Type</label>
+                            </div>
+                            <select id="typeNameInsert" class="type-select form-control" aria-label="Type"
+                                aria-describedby="inputGroup-sizing-default" v-model="typeInsert">
+                                <option value="Income">Income</option>
+                                <option value="Expense">Expense</option>
+                            </select>
+                        </div>
+
+                        <!-- VALUE INSERT -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Value</span>
+                            </div>
+                            <input type="number" class="value-input form-control" aria-label="Value"
+                                aria-describedby="inputGroup-sizing-default" v-model="valueInsert">
+                        </div>
+
+                        <!-- CURRENCY INSERT -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="currencyNameInsert">Currency</label>
+                            </div>
+                            <select id="currencyNameInsert" class="currency-select form-control" aria-label="Currency"
+                                aria-describedby="inputGroup-sizing-default" v-model="currencyInsert">
+                                <option value="RON">RON</option>
+                                <option value="EUR">EUR</option>
+                                <option value="USD">USD</option>
+                            </select>
+                        </div>
+
+                        <!-- DATE INSERT -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
+                            </div>
+                            <input type="datetime-local" class="date-input form-control" aria-label="Value"
+                                aria-describedby="inputGroup-sizing-default" v-model="dateInsert"
+                                @change="inputChanging()">
+                        </div>
                     </div>
+
+                    <!-- BUTTONS FOR MODAL -->
                     <div class="modal-footer">
                         <button type="button" class="btn-cashflow-close" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn-save">Save changes</button>
+                        <button type="button" class="btn-save" @click="insertCashflowLog()">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -128,38 +197,16 @@ export default {
             showToast: false,
             toastMessage: '',
             showButton: false,
+            idEntityInsert: 0,
+            typeInsert: '',
+            valueInsert: 0,
+            currencyInsert: '',
+            dateInsert: ''
         }
     },
     created() {
-        const token = localStorage.getItem('user-token'); // get the token from local storage
-        axios.get('http://localhost:3000/cashflowlog', {
-            headers: {
-                Authorization: `Bearer ${token}` // send the token in the Authorization header
-            }
-        })
-            .then(response => {
-                this.cashflowLog = response.data;
-            })
-            .catch(error => {
-                localStorage.removeItem('user-token');
-                this.toastMessage = 'Invalid login: ' + error.response.data.message;
-                this.showToast = true;
-
-                setTimeout(() => {
-                    this.showToast = false;
-                }, 5000);
-                this.$router.push('/login');
-                return;
-            });
-
-        axios.get('http://localhost:3000/entities')
-            .then(response => {
-                this.entities = response.data;
-            })
-            .catch(error => {
-                console.error(error);
-            });
-        this.cashflowLog = this.cashflowLog.map(log => ({ ...log, selectedEntityId: log.idEntities }));
+        this.getCashflow();
+        this.getEntities();
     },
     methods: {
         logout() {
@@ -168,6 +215,85 @@ export default {
         },
         inputChanging() {
             this.showButton = true;
+        },
+        insertCashflowLog() {
+            console.log(this.idEntityInsert, this.typeInsert, this.valueInsert, this.currencyInsert, this.dateInsert);
+            const token = localStorage.getItem('user-token'); // get the token from local storage
+            if (this.idEntityInsert == 0 || this.typeInsert == '' || this.valueInsert == 0 || this.currencyInsert == '' || this.dateInsert == '') {
+                this.showToast = true;
+                this.toastMessage = 'Please fill all fields';
+                setTimeout(() => {
+                    this.showToast = false;
+                }, 5000);
+            } else {
+                axios.post("http://localhost:3000/cashflowlog/insertLog", {
+                    idEntity: this.idEntityInsert,
+                    type: this.typeInsert,
+                    value: this.valueInsert,
+                    currency: this.currencyInsert,
+                    date: this.dateInsert
+                },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}` // send the token in the Authorization header
+                        }
+                    })
+                    .then(response => {
+                        //----push the new log to the array a better variant
+                        this.idEntityInsert = 0;
+                        this.typeInsert = '';
+                        this.valueInsert = 0;
+                        this.currencyInsert = '';
+                        this.dateInsert = '';
+                        if (response.data.success) {
+                            this.showToast = true;
+                            this.toastMessage = 'Log inserted successfully';
+                            setTimeout(() => {
+                                this.showToast = false;
+                            }, 5000);
+                            this.getCashflow();
+                        }
+
+                    })
+                    .catch(error => {
+                        this.showToast = true;
+                        this.toastMessage = 'Error inserting log: ' + error.response.data.error;
+                        setTimeout(() => {
+                            this.showToast = false;
+                        }, 5000);
+                    });
+            }
+        },
+        getCashflow() {
+            const token = localStorage.getItem('user-token'); // get the token from local storage
+            axios.get('http://localhost:3000/cashflowlog', {
+                headers: {
+                    Authorization: `Bearer ${token}` // send the token in the Authorization header
+                }
+            })
+                .then(response => {
+                    this.cashflowLog = response.data;
+                })
+                .catch(error => {
+                    localStorage.removeItem('user-token');
+                    this.toastMessage = 'Invalid login: ' + error.response.data.message;
+                    this.showToast = true;
+
+                    setTimeout(() => {
+                        this.showToast = false;
+                    }, 5000);
+                    this.$router.push('/login');
+                    return;
+                });
+        },
+        getEntities() {
+            axios.get('http://localhost:3000/entities')
+                .then(response => {
+                    this.entities = response.data;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
     }
 }
@@ -228,5 +354,4 @@ export default {
     z-index: 1;
     transition: opacity 0.5s ease-in-out;
 }
-
 </style>

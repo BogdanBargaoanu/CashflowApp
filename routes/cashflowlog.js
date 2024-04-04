@@ -169,8 +169,8 @@ router.post('/insertLog', function (req, res, next) {
         res.status(401).json({ success: false, error: 'Invalid token' });
         return;
     }
-    const { idEntity, type, value, currency, description, date } = req.body;
-    if (!idEntity || !type || !value || !currency || !description || !date) {
+    const { idEntity, type, value, currency, date } = req.body;
+    if (!idEntity || !type || !value || !currency /*|| !description*/ || !date) {
         res.status(400).json({ success: false, error: 'Missing required fields' });
         return;
     }
@@ -178,13 +178,17 @@ router.post('/insertLog', function (req, res, next) {
         res.status(400).json({ success: false, error: 'Value must be greater than 0' });
         return;
     }
-    if (!dateRegex.test(date)) {
-        res.status(400).json({ success: false, error: 'Invalid date format.' });
+    console.log(userId," ", idEntity," ", type," ", value," ", currency," ", date);
+    if(type != "Income" && type != "Expense") {
+        res.status(400).json({ success: false, error: 'Invalid type' });
         return;
     }
-
-    const query = `INSERT INTO cashflowlog (idUser, idEntity, type, value, currency, description, date) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    req.db.query(query, [userId, idEntity, type, value, currency, description, mysqlDate], (err, result) => {
+    if(currency != "USD" && currency != "EUR" && currency != "RON") {
+        res.status(400).json({ success: false, error: 'Invalid currency' });
+        return;
+    }
+    const query = `INSERT INTO cashflowlog (idUser, idEntity, type, value, currency, date) VALUES (?, ?, ?, ?, ?, ?)`;
+    req.db.query(query, [userId, idEntity, type, value, currency, date], (err, result) => {
         if (err) {
             res.status(500).json({ success: false, error: err.message });
             return;
