@@ -265,6 +265,9 @@ export default {
                     });
             }
         },
+        updateCashflowLog() {
+            
+        },
         getCashflow() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
             axios.get('http://localhost:3000/cashflowlog', {
