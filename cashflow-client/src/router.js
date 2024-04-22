@@ -3,6 +3,7 @@ import UserLogin from './components/UserLogin.vue';
 import RegistrationPage from './components/RegistrationPage.vue';
 import DashboardPage from './components/DashboardPage.vue';
 import CashFlowLog from './components/CashFlowLog.vue';
+import EntitiesPage from './components/EntitiesPage.vue';
 
 const routes = [
   { path: '/', redirect: '/dashboard' },
@@ -10,6 +11,7 @@ const routes = [
   { path: '/register', component: RegistrationPage},
   { path: '/dashboard', component: DashboardPage, meta: { requiresAuth: true } },
   { path: '/cashflow-log', component: CashFlowLog, meta: { requiresAuth: true } },
+  { path: '/entities', component: EntitiesPage, meta: { requiresAuth: true }},
 ];
 
 const router = createRouter({

@@ -12,7 +12,10 @@
             <img src="../assets/dashboard-img/cashflow-log.png" alt="cashflow-log" class="cashflow-log-icon">
         </div>
         <div class="content-box cb4">categories-graph
-            <img src="../assets/dashboard-img/categories-graph.png" alt="categories-graph" class="categories-graph-icon">
+            <img src="../assets/dashboard-img/categories-graph.png" alt="categories-graph"
+                class="categories-graph-icon">
+        </div>
+        <div @click="entities()" class="content-box cb5">entities
         </div>
         <button @click="logout()" class="btn-logout">Logout</button>
     </div>
@@ -29,6 +32,9 @@ export default {
         },
         cashflowLog() {
             this.$router.push('/cashflow-log');
+        },
+        entities() {
+            this.$router.push('/entities');
         },
         drawChart() {
             // Load the Visualization API and the corechart package
