@@ -3,10 +3,10 @@
         <h1 class="text-center cashflowlog-heading">Cashflow</h1>
         <div class="accordion" id="accordionCashflow">
             <div v-for="(log, index) in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element"
-                :style="{ animationDelay: index / 4 + 's' }" @click="openLog(log.idcashflowLog)">
+                :style="{ animationDelay: index / 4 + 's' }">
 
                 <!-- ACCORDATION INFO -->
-                <h2 class="accordion-header" id="headingOne">
+                <h2 class="accordion-header" id="headingOne" @click="openLog(log)">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         :data-bs-target="'#collapse' + log.idcashflowLog" aria-expanded="false"
                         :aria-controls="'collapse' + log.idcashflowLog">
@@ -29,8 +29,8 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text" :for="'entityName' + log.idcashflowLog">Name</label>
                             </div>
-                            <select :id="'entityName' + log.idcashflowLog" class="name-select form-control" aria-label="Name"
-                                aria-describedby="inputGroup-sizing-default" v-model="log.identity"
+                            <select :id="'entityName' + log.idcashflowLog" class="name-select form-control"
+                                aria-label="Name" aria-describedby="inputGroup-sizing-default" v-model="log.identity"
                                 @change="inputChanging()">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
                                     {{
@@ -43,8 +43,8 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text" :for="'typeName' + log.idcashflowLog">Type</label>
                             </div>
-                            <select :id="'typeName' + log.idcashflowLog" class="type-select form-control" aria-label="Type"
-                                aria-describedby="inputGroup-sizing-default" v-model="log.type"
+                            <select :id="'typeName' + log.idcashflowLog" class="type-select form-control"
+                                aria-label="Type" aria-describedby="inputGroup-sizing-default" v-model="log.type"
                                 @change="inputChanging()">
                                 <option value="Income">Income</option>
                                 <option value="Expense">Expense</option>
@@ -56,19 +56,20 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Value</span>
                             </div>
-                            <input :id="'value' + log.idcashflowLog" type="number" class="value-input form-control" aria-label="Value"
-                                aria-describedby="inputGroup-sizing-default" v-model="log.value"
+                            <input :id="'value' + log.idcashflowLog" type="number" class="value-input form-control"
+                                aria-label="Value" aria-describedby="inputGroup-sizing-default" v-model="log.value"
                                 @change="inputChanging()">
                         </div>
 
                         <!-- CURRENCY -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <label class="input-group-text" :for="'currencyName' + log.idcashflowLog">Currency</label>
+                                <label class="input-group-text"
+                                    :for="'currencyName' + log.idcashflowLog">Currency</label>
                             </div>
-                            <select :id="'currencyName' + log.idcashflowLog" class="currency-select form-control" aria-label="Currency"
-                                aria-describedby="inputGroup-sizing-default" v-model="log.currency"
-                                @change="inputChanging()">
+                            <select :id="'currencyName' + log.idcashflowLog" class="currency-select form-control"
+                                aria-label="Currency" aria-describedby="inputGroup-sizing-default"
+                                v-model="log.currency" @change="inputChanging()">
                                 <option value="RON">RON</option>
                                 <option value="EUR">EUR</option>
                                 <option value="USD">USD</option>
@@ -80,7 +81,8 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
                             </div>
-                            <input :id="'date' + log.idcashflowLog" type="datetime-local" class="date-input form-control" aria-label="Value"
+                            <input :id="'date' + log.idcashflowLog" type="datetime-local"
+                                class="date-input form-control" aria-label="Value"
                                 aria-describedby="inputGroup-sizing-default" v-model="log.date"
                                 @change="inputChanging()">
                         </div>
@@ -195,15 +197,25 @@ export default {
         return {
             cashflowLog: [],
             entities: [],
+
+            // toast
             showToast: false,
             toastMessage: '',
             showButton: false,
+
+            // insert log
             idEntityInsert: 0,
             typeInsert: '',
             valueInsert: 0,
             currencyInsert: '',
             dateInsert: '',
-            currentId: 0
+
+            // current log
+            currentId: 0,
+            currentType: '',
+            currentValue: 0,
+            currentCurrency: '',
+            currentDate: '',
         }
     },
 
@@ -301,17 +313,39 @@ export default {
                     console.error(error);
                 });
         },
-        openLog(id) {
+        openLog(log) {
             if (this.currentId == 0) {
-                this.currentId = id;
+                this.currentId = log.idcashflowLog;
+                this.currentType = log.type;
+                this.currentValue = log.value;
+                this.currentCurrency = log.currency;
+                this.currentDate = log.date;
+                //console.log(`currentId: ${this.currentId} currentType: ${this.currentType} currentValue: ${this.currentValue} currentCurrency: ${this.currentCurrency} currentDate: ${this.currentDate}`)
             } else {
-                if (this.currentId == id) {
+                if (this.currentId == log.idcashflowLog) {
+
+                    //reset the log in the array
+                    log.type = this.currentType;
+                    log.value = this.currentValue;
+                    log.currency = this.currentCurrency;
+                    log.date = this.currentDate;
+
+                    // reset the current log values
                     this.currentId = 0;
+                    this.currentType = '';
+                    this.currentValue = 0;
+                    this.currentCurrency = '';
+                    this.currentDate = '';
                 } else {
-                    this.currentId = id;
-                
+                    this.currentId = log.idcashflowLog;
+                    this.currentType = log.type;
+                    this.currentValue = log.value;
+                    this.currentCurrency = log.currency;
+                    this.currentDate = log.date;
+                    //console.log(`currentId: ${this.currentId} currentType: ${this.currentType} currentValue: ${this.currentValue} currentCurrency: ${this.currentCurrency} currentDate: ${this.currentDate}`)
+                }
             }
-            }
+            console.log(this.currentId);
         }
     }
 }
