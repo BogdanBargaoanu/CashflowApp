@@ -17,7 +17,7 @@
         </div>
         <div @click="entities()" class="content-box cb5">entities
         </div>
-        <button @click="logout()" class="btn-logout">Logout</button>
+        <button @click="logout()" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>
 </template>
 

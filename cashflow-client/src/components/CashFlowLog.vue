@@ -173,7 +173,7 @@
             </div>
         </div>
     </div>
-    <button @click="logout()" class="btn-logout">Logout</button>
+    <button @click="logout()" class="btn-logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout</button>
 
 
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
