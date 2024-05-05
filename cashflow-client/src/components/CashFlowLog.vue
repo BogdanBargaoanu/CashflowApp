@@ -87,7 +87,7 @@
                                 @change="inputChanging()">
                         </div>
                         <transition name="fade">
-                            <button v-if="showButton" @click="updateCashflowLog(log.idcashflowLog)"
+                            <button v-if="showButton" @click="updateCashflowLog(log)"
                                 class="btn btn-primary">Update</button>
                         </transition>
                     </div>
@@ -232,7 +232,7 @@ export default {
             this.showButton = true;
         },
         insertCashflowLog() {
-            console.log(this.idEntityInsert, this.typeInsert, this.valueInsert, this.currencyInsert, this.dateInsert);
+            //console.log(this.idEntityInsert, this.typeInsert, this.valueInsert, this.currencyInsert, this.dateInsert);
             const token = localStorage.getItem('user-token'); // get the token from local storage
             if (this.idEntityInsert == 0 || this.typeInsert == '' || this.valueInsert == 0 || this.currencyInsert == '' || this.dateInsert == '') {
                 this.showToast = true;
@@ -279,8 +279,32 @@ export default {
                     });
             }
         },
-        updateCashflowLog() {
-
+        updateCashflowLog(log) {
+            const token = localStorage.getItem('user-token'); // get the token from local storage
+            console.log(JSON.stringify(log));
+            axios.post("http://localhost:3000/cashflowlog/insertLog", JSON.stringify(log),
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}` // send the token in the Authorization header
+                        }
+                    })
+                    .then(response => {
+                        if (response.data.success) {
+                            this.showToast = true;
+                            this.toastMessage = 'Log updated successfully';
+                            setTimeout(() => {
+                                this.showToast = false;
+                            }, 5000);
+                            this.getCashflow();
+                        }
+                    })
+                    .catch(error => {
+                        this.showToast = true;
+                        this.toastMessage = 'Error updating log: ' + error.response.data.error;
+                        setTimeout(() => {
+                            this.showToast = false;
+                        }, 5000);
+                    });
         },
         getCashflow() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
