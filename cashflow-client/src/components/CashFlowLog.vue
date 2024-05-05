@@ -3,7 +3,7 @@
         <h1 class="text-center cashflowlog-heading">Cashflow</h1>
         <div class="accordion" id="accordionCashflow">
             <div v-for="(log, index) in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element"
-                :style="{ animationDelay: index / 4 + 's' }">
+                :style="{ animationDelay: index / 4 + 's' }" @click="openLog(log.idcashflowLog)">
 
                 <!-- ACCORDATION INFO -->
                 <h2 class="accordion-header" id="headingOne">
@@ -12,7 +12,7 @@
                         :aria-controls="'collapse' + log.idcashflowLog">
                         Transaction ID: {{ log.idcashflowLog }} &nbsp;<b
                             :class="{ 'text-danger': log.type == 'Expense', 'text-success': log.type == 'Income' }">{{
-                log.type }}</b>
+                                log.type }}</b>
                         &nbsp;
                         Name: {{ log.name }} Value: {{ log.value }} Currency: {{ log.currency }}
                         Date: {{ log.date }}
@@ -34,7 +34,7 @@
                                 @change="inputChanging()">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
                                     {{
-                entity.name }}</option>
+                                        entity.name }}</option>
                             </select>
                         </div>
 
@@ -113,7 +113,7 @@
                                 aria-describedby="inputGroup-sizing-default" v-model="idEntityInsert">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
                                     {{
-                entity.name }}</option>
+                                        entity.name }}</option>
                             </select>
                         </div>
 
@@ -202,9 +202,11 @@ export default {
             typeInsert: '',
             valueInsert: 0,
             currencyInsert: '',
-            dateInsert: ''
+            dateInsert: '',
+            currentId: 0
         }
     },
+
     created() {
         this.getCashflow();
         this.getEntities();
@@ -266,7 +268,7 @@ export default {
             }
         },
         updateCashflowLog() {
-            
+
         },
         getCashflow() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
@@ -298,6 +300,19 @@ export default {
                 .catch(error => {
                     console.error(error);
                 });
+        },
+        openLog(id) {
+            if (this.currentId == 0) {
+                this.currentId = id;
+            } else {
+                if (this.currentId == id) {
+                    this.currentId = 0;
+                } else {
+                    this.currentId = id;
+                
+            }
+            }
+            console.log(this.currentId);
         }
     }
 }
