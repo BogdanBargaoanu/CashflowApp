@@ -288,7 +288,12 @@ router.post('/updateLog', function (req, res, next) {
         res.status(401).json({ success: false, error: 'Invalid token' });
         return;
     }
-    const { idcashflowLog, idEntity, type, value, currency, date } = req.body;
+    const idcashflowLog = req.body.idcashflowLog,
+    idEntity = req.body.idEntity,
+    type = req.body.type,
+    value = req.body.value,
+    currency = req.body.currency,
+    date = req.body.date;
     console.log(`${idcashflowLog} ${idEntity} ${type} ${value} ${currency} ${date}`);
     if (!idcashflowLog || !idEntity || !type || !value || !currency /*|| !description*/ || !date) {
         res.status(400).json({ success: false, error: 'Missing required fields' });
@@ -306,7 +311,7 @@ router.post('/updateLog', function (req, res, next) {
         res.status(400).json({ success: false, error: 'Invalid currency' });
         return;
     }
-    const query = `UPDATE cashflowlog SET idUser = ?, idEntity = ?, type = ?, value = ?, currency = ?, date = ?) WHERE idcashflowLog = ?`;
+    const query = `UPDATE cashflowlog SET idUser = ?, idEntity = ?, type = ?, value = ?, currency = ?, date = ? WHERE idcashflowLog = ?`;
     req.db.query(query, [userId, idEntity, type, value, currency, date, idcashflowLog], (err, result) => {
         if (err) {
             res.status(500).json({ success: false, error: err.message });

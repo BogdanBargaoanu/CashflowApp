@@ -30,7 +30,7 @@
                                 <label class="input-group-text" :for="'entityName' + log.idcashflowLog">Name</label>
                             </div>
                             <select :id="'entityName' + log.idcashflowLog" class="name-select form-control"
-                                aria-label="Name" aria-describedby="inputGroup-sizing-default" v-model="log.identity"
+                                aria-label="Name" aria-describedby="inputGroup-sizing-default" v-model="log.idEntity"
                                 @change="inputChanging()">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
                                     {{
@@ -282,29 +282,42 @@ export default {
         updateCashflowLog(log) {
             const token = localStorage.getItem('user-token'); // get the token from local storage
             console.log(JSON.stringify(log));
-            axios.post("http://localhost:3000/cashflowlog/insertLog", JSON.stringify(log),
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}` // send the token in the Authorization header
-                        }
-                    })
-                    .then(response => {
-                        if (response.data.success) {
-                            this.showToast = true;
-                            this.toastMessage = 'Log updated successfully';
-                            setTimeout(() => {
-                                this.showToast = false;
-                            }, 5000);
-                            this.getCashflow();
-                        }
-                    })
-                    .catch(error => {
+            axios.post("http://localhost:3000/cashflowlog/updateLog", {
+                idcashflowLog: log.idcashflowLog,
+                idEntity: log.idEntity,
+                type: log.type,
+                value: log.value,
+                currency: log.currency,
+                date: log.date
+            },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}` // send the token in the Authorization header
+                    }
+                })
+                .then(response => {
+                    if (response.data.success) {
                         this.showToast = true;
-                        this.toastMessage = 'Error updating log: ' + error.response.data.error;
+                        this.toastMessage = 'Log updated successfully';
+
+                        // update the current log values to the new ones so it doesn't reset when closing the log
+                        this.currentType = log.type;
+                        this.currentValue = log.value;
+                        this.currentCurrency = log.currency;
+                        this.currentDate = log.date;
                         setTimeout(() => {
                             this.showToast = false;
                         }, 5000);
-                    });
+                        this.getCashflow();
+                    }
+                })
+                .catch(error => {
+                    this.showToast = true;
+                    this.toastMessage = 'Error updating log: ' + error.response.data.error;
+                    setTimeout(() => {
+                        this.showToast = false;
+                    }, 5000);
+                });
         },
         getCashflow() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
