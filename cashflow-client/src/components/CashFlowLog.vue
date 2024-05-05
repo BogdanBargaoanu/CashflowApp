@@ -27,9 +27,9 @@
                         <!-- ENTITY -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <label class="input-group-text" for="entityName">Name</label>
+                                <label class="input-group-text" :for="'entityName' + log.idcashflowLog">Name</label>
                             </div>
-                            <select id="entityName" class="name-select form-control" aria-label="Name"
+                            <select :id="'entityName' + log.idcashflowLog" class="name-select form-control" aria-label="Name"
                                 aria-describedby="inputGroup-sizing-default" v-model="log.identity"
                                 @change="inputChanging()">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
@@ -41,9 +41,9 @@
                         <!-- TYPE -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <label class="input-group-text" for="typeName">Type</label>
+                                <label class="input-group-text" :for="'typeName' + log.idcashflowLog">Type</label>
                             </div>
-                            <select id="typeName" class="type-select form-control" aria-label="Type"
+                            <select :id="'typeName' + log.idcashflowLog" class="type-select form-control" aria-label="Type"
                                 aria-describedby="inputGroup-sizing-default" v-model="log.type"
                                 @change="inputChanging()">
                                 <option value="Income">Income</option>
@@ -56,7 +56,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Value</span>
                             </div>
-                            <input type="number" class="value-input form-control" aria-label="Value"
+                            <input :id="'value' + log.idcashflowLog" type="number" class="value-input form-control" aria-label="Value"
                                 aria-describedby="inputGroup-sizing-default" v-model="log.value"
                                 @change="inputChanging()">
                         </div>
@@ -64,9 +64,9 @@
                         <!-- CURRENCY -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <label class="input-group-text" for="currencyName">Currency</label>
+                                <label class="input-group-text" :for="'currencyName' + log.idcashflowLog">Currency</label>
                             </div>
-                            <select id="currencyName" class="currency-select form-control" aria-label="Currency"
+                            <select :id="'currencyName' + log.idcashflowLog" class="currency-select form-control" aria-label="Currency"
                                 aria-describedby="inputGroup-sizing-default" v-model="log.currency"
                                 @change="inputChanging()">
                                 <option value="RON">RON</option>
@@ -80,7 +80,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
                             </div>
-                            <input type="datetime-local" class="date-input form-control" aria-label="Value"
+                            <input :id="'date' + log.idcashflowLog" type="datetime-local" class="date-input form-control" aria-label="Value"
                                 aria-describedby="inputGroup-sizing-default" v-model="log.date"
                                 @change="inputChanging()">
                         </div>
@@ -134,7 +134,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Value</span>
                             </div>
-                            <input type="number" class="value-input form-control" aria-label="Value"
+                            <input id="valueInsert" type="number" class="value-input form-control" aria-label="Value"
                                 aria-describedby="inputGroup-sizing-default" v-model="valueInsert">
                         </div>
 
@@ -312,7 +312,6 @@ export default {
                 
             }
             }
-            console.log(this.currentId);
         }
     }
 }
