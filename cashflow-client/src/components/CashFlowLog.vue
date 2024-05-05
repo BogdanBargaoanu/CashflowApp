@@ -345,7 +345,8 @@ export default {
                     //console.log(`currentId: ${this.currentId} currentType: ${this.currentType} currentValue: ${this.currentValue} currentCurrency: ${this.currentCurrency} currentDate: ${this.currentDate}`)
                 }
             }
-            console.log(this.currentId);
+            this.showButton = false;
+            //console.log(this.currentId);
         }
     }
 }
