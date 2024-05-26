@@ -139,8 +139,14 @@ router.post('/addEntity', function (req, res, next) {
  * /entities/updateEntity:
  *   post:
  *     tags:
- *      - entities
+ *       - entities
  *     description: Update an entity.
+ *     parameters:
+ *       - in: path
+ *         name: idEntities
+ *         schema:
+ *           type: integer
+ *         required: true
  *     requestBody:
  *       required: true
  *       content:
@@ -151,9 +157,6 @@ router.post('/addEntity', function (req, res, next) {
  *               name:
  *                 type: string
  *                 description: The name of the entity.
- *               isUser:
- *                 type: boolean
- *                 description: Status if the entity is an user.
  *     responses:
  *       200:
  *         description: Entity added successfully.
@@ -184,11 +187,11 @@ router.post('/addEntity', function (req, res, next) {
  *                   type: string
  * */
 
-router.post('/updateEntity', function (req, res, next) {
+router.post('/updateEntity/:idEntities', function (req, res, next) {
     const updateQuery = 'UPDATE entities SET name = ? WHERE idEntities = ?';
     const checkName = 'SELECT COUNT(idEntities) AS count FROM entities WHERE name = ?';
   
-    if (!req.body.name || !req.body.idEntities) {
+    if (!req.body.name || !req.params.idEntities) {
       res.status(400).json({ error: 'The request has missing information!' });
       return;
     }
@@ -217,7 +220,7 @@ router.post('/updateEntity', function (req, res, next) {
           return;
         }
   
-        req.db.query(updateQuery, [req.body.name, req.body.idEntities], (err, result) => {
+        req.db.query(updateQuery, [req.body.name, req.params.idEntities], (err, result) => {
           if (err) {
             res.status(500).json({ error: err.message });
             return;

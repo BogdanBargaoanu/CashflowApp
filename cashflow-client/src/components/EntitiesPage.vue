@@ -85,64 +85,87 @@ export default {
     },
     openEntity(entity) {
       console.log(entity);
-    }
+    },
+    updateEntitiy(entity) {
+      axios.post(`http://localhost:3000/entities/updateEntity/${entity.idEntities}`, entity)
+        .then(response => {
+          if (response.data.message) {
+            this.showToast = true;
+            this.toastMessage = 'Entity updated successfully';
+            this.showButton = false;
+            setTimeout(() => {
+              this.showToast = false;
+            }, 5000);
+            //this.getEntities();
+          }
+
+        })
+        .catch(error => {
+          this.showToast = true;
+          this.toastMessage = error.response.data.error;
+          this.showButton = false;
+          setTimeout(() => {
+            this.showToast = false;
+          }, 5000);
+        });
+    },
   }
 }
 </script>
 
 <style scoped>
 .app-global {
-    height: 90%;
+  height: 90%;
 }
 
 #entities entity-element {
-    width: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
+  width: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
 }
 
 .entity-element {
-    margin-bottom: 10px;
-    animation: slide-up-fade-in 1s ease;
-    animation-fill-mode: backwards;
-    /* This makes the animation delay apply to the start of the animation, not the end */
+  margin-bottom: 10px;
+  animation: slide-up-fade-in 1s ease;
+  animation-fill-mode: backwards;
+  /* This makes the animation delay apply to the start of the animation, not the end */
 }
 
 .fade-enter-from,
 .fade-leave-to {
-    position: relative;
-    width: 75%;
-    display: block;
-    margin: 3rem auto 2rem auto;
-    border-radius: 1.5rem;
-    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
-    z-index: 1;
-    opacity: 0;
+  position: relative;
+  width: 75%;
+  display: block;
+  margin: 3rem auto 2rem auto;
+  border-radius: 1.5rem;
+  background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+  z-index: 1;
+  opacity: 0;
 }
 
 .fade-enter-to,
 .fade-leave-from {
-    position: relative;
-    width: 75%;
-    display: block;
-    margin: 3rem auto 2rem auto;
-    border-radius: 1.5rem;
-    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
-    z-index: 1;
-    opacity: 1;
+  position: relative;
+  width: 75%;
+  display: block;
+  margin: 3rem auto 2rem auto;
+  border-radius: 1.5rem;
+  background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+  z-index: 1;
+  opacity: 1;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-    position: relative;
-    width: 75%;
-    display: block;
-    margin: 3rem auto 2rem auto;
-    border-radius: 1.5rem;
-    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
-    z-index: 1;
-    transition: opacity 0.5s ease-in-out;
+  position: relative;
+  width: 75%;
+  display: block;
+  margin: 3rem auto 2rem auto;
+  border-radius: 1.5rem;
+  background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+  z-index: 1;
+  transition: opacity 0.5s ease-in-out;
 }
 </style>
