@@ -119,7 +119,7 @@ button[class="btn btn-primary"]:hover::before {
     width: 90vw;
     height: 80vh;
 }
-.dashboard-heading, .cashflowlog-heading {
+.dashboard-heading, .cashflowlog-heading, .entities-heading {
     width: 100%;
     color: var(--heading-color);
     text-shadow: 6px 6px 6px rgba(14, 14, 14, 0.534);
