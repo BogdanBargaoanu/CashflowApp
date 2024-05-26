@@ -27,7 +27,7 @@
                 aria-describedby="input-Group-sizing-default" v-model="entity.name" @change="inputChanging()">
             </div>
             <transition name="fade">
-              <button v-if="showButton" @click="updateEntitiy(entity)" class="btn btn-primary">Update</button>
+              <button v-if="showButton" @click="updateEntity(entity)" class="btn btn-primary">Update</button>
             </transition>
           </div>
         </div>
@@ -61,6 +61,13 @@ export default {
       showToast: false,
       toastMessage: '',
       showButton: false,
+      
+      // current entity
+      currentEntity: {
+        idEntities: 0,
+        name: '',
+        isUser: false,
+      },
     };
   },
   created() {
@@ -84,9 +91,26 @@ export default {
         });
     },
     openEntity(entity) {
-      console.log(entity);
+      if (this.currentEntity.idEntities == 0) {
+        this.currentEntity = entity;
+      } else {
+        if (this.currentEntity.idEntities == entity.idEntities) {
+          entity.name = this.currentEntity.name;
+          console.log(entity);
+          console.log(this.currentEntity);
+          
+          this.currentEntity = {
+            idEntities: 0,
+            name: '',
+            isUser: false,
+          };
+        } else {
+          this.currentEntity = entity;
+        }
+      }
+      this.showButton = false;
     },
-    updateEntitiy(entity) {
+    updateEntity(entity) {
       axios.post(`http://localhost:3000/entities/updateEntity/${entity.idEntities}`, entity)
         .then(response => {
           if (response.data.message) {
