@@ -5,7 +5,7 @@
             <div v-for="(log, index) in cashflowLog" :key="log.idcashflowLog" class="accordion-item cashflow-element"
                 :style="{ animationDelay: index / 4 + 's' }">
 
-                <!-- ACCORDATION INFO -->
+                <!-- ACCORDION INFO -->
                 <h2 class="accordion-header" id="headingOne" @click="openLog(log)">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         :data-bs-target="'#collapse' + log.idcashflowLog" aria-expanded="false"
@@ -19,7 +19,7 @@
                     </button>
                 </h2>
 
-                <!-- ACCORDATION BODY COLLAPSED -->
+                <!-- ACCORDION BODY COLLAPSED -->
                 <div :id="'collapse' + log.idcashflowLog" class="accordion-collapse collapse"
                     :aria-labelledby="'heading' + log.idcashflowLog" data-bs-parent="#accordionCashflow">
                     <div class="accordion-body">

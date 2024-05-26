@@ -1,11 +1,11 @@
 <template>
   <div id="entities">
     <h1 class="text-center entities-heading">Entities</h1>
-    <div class="accordation" id="accordationEntities">
-      <div v-for="(entity, index) in entities" :key="entity.idEntities" class="accordation-item entity-element"
+    <div class="accordion" id="accordionEntity">
+      <div v-for="(entity, index) in entities" :key="entity.idEntities" class="accordion-item entity-element"
         :style="{ animationDelay: index / 4 + 's' }">
-        <!-- ACCORDATION INFO -->
-        <h2 class="accordion-header" id="headingOne" @click="openEntity(log)">
+        <!-- ACCORDION INFO -->
+        <h2 class="accordion-header" id="headingOne" @click="openEntity(entity)">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
             :data-bs-target="'#collapse' + entity.idEntities" aria-expanded="false"
             :aria-controls="'collapse' + entity.idEntities">
@@ -15,7 +15,7 @@
           </button>
         </h2>
 
-        <!-- ACCORDATION BODY COLLAPSED -->
+        <!-- ACCORDION BODY COLLAPSED -->
         <div :id="'collapse' + entity.idEntities" class="accordion-collapse collapse"
           :aria-labelledby="'heading' + entity.idEntities" data-bs-parent="#accordionEntity">
           <div class="accordion-body">
@@ -27,7 +27,7 @@
                 aria-describedby="input-Group-sizing-default" v-model="entity.name" @change="inputChanging()">
             </div>
             <transition name="fade">
-              <button v-if="showButton" @click="updateCashflowLog(log)" class="btn btn-primary">Update</button>
+              <button v-if="showButton" @click="updateEntitiy(entity)" class="btn btn-primary">Update</button>
             </transition>
           </div>
         </div>
@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'EntitiesPage',
   data() {
@@ -61,5 +63,86 @@ export default {
       showButton: false,
     };
   },
+  created() {
+    this.getEntities();
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem('user-token');
+      this.$router.push('/login');
+    },
+    inputChanging() {
+      this.showButton = true;
+    },
+    getEntities() {
+      axios.get('http://localhost:3000/entities')
+        .then(response => {
+          this.entities = response.data;
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    },
+    openEntity(entity) {
+      console.log(entity);
+    }
+  }
 }
 </script>
+
+<style scoped>
+.app-global {
+    height: 90%;
+}
+
+#entities entity-element {
+    width: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.entity-element {
+    margin-bottom: 10px;
+    animation: slide-up-fade-in 1s ease;
+    animation-fill-mode: backwards;
+    /* This makes the animation delay apply to the start of the animation, not the end */
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    position: relative;
+    width: 75%;
+    display: block;
+    margin: 3rem auto 2rem auto;
+    border-radius: 1.5rem;
+    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+    z-index: 1;
+    opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+    position: relative;
+    width: 75%;
+    display: block;
+    margin: 3rem auto 2rem auto;
+    border-radius: 1.5rem;
+    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+    z-index: 1;
+    opacity: 1;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    position: relative;
+    width: 75%;
+    display: block;
+    margin: 3rem auto 2rem auto;
+    border-radius: 1.5rem;
+    background: linear-gradient(90deg, var(--background-color3) 0%, var(--background-color2) 35%, var(--background-color1) 100%);
+    z-index: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+</style>
