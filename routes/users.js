@@ -44,7 +44,7 @@ router.get('/', function (req, res, next) {
  *   post:
  *     tags:
  *      - users
- *     description: Add a user.
+ *     description: Add an user.
  *     requestBody:
  *       required: true
  *       content:
@@ -162,7 +162,7 @@ router.post('/addUser', function (req, res, next) {
  *   post:
  *     tags:
  *      - users
- *     description: Login a user.
+ *     description: Login an user.
  *     requestBody:
  *       required: true
  *       content:
