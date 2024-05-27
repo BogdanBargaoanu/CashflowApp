@@ -322,3 +322,71 @@ router.post('/updateLog', function (req, res, next) {
 });
 
 module.exports = router;
+
+
+/**
+ * @openapi
+ * /cashflowlog/deleteLog/{idcashflowLog}:
+ *   delete:
+ *     tags:
+ *       - cashflowlog
+ *     description: Delete a cashflow log.
+ *     parameters:
+ *       - in: path
+ *         name: idcashflowLog
+ *         schema:
+ *           type: integer
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Log deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error caused by an inappropriate input.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ * */
+
+router.delete('/deleteLog/:idcashflowLog', function (req, res, next) {
+    const deleteQuery = 'DELETE FROM cashflowlog WHERE idcashflowLog = ?';
+  
+    if (!req.params.idcashflowLog) {
+      res.status(400).json({ error: 'The request has missing information!' });
+      return;
+    }
+  
+    req.db.query(deleteQuery, [req.params.idcashflowLog], (err, result) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+  
+        if (result.affectedRows == 0) {
+            res.status(400).json({ error: 'No cashflow log found with the provided id!' });
+            return;
+        }
+  
+        res.json({ message: 'Log deleted successfully!' });
+    });
+  });
+  
