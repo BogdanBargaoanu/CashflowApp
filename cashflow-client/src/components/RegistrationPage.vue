@@ -79,6 +79,7 @@ export default {
         .then(response => {
           if (response.data.success) {
             // The registration was successful
+            this.insertEntity();
             this.$router.push('/login');
           }
         })
@@ -90,9 +91,25 @@ export default {
             this.showToast = false;
           }, 5000);
         });
-    }
+    },
+    insertEntity() {
+          axios.post('http://localhost:3000/entities/addEntity', {
+            name: this.username,
+            isUser: 1,
+          }).then(response => {
+            if (response.data.message) {
+              // entity inserted successfully
+            }
+          }).catch(error => {
+            this.showToast = true;
+            this.toastMessage = error.response.data.error;
+            setTimeout(() => {
+              this.showToast = false;
+            }, 5000);
+          });
+        },
+    },
   }
-}
 </script>
 
 <style scoped>
