@@ -85,8 +85,7 @@ router.get('/', function (req, res, next) {
 router.post('/addEntity', function (req, res, next) {
     const insertQuery = 'INSERT INTO entities (name, isUser) VALUES (?, ?)';
     const checkName = 'SELECT COUNT(idEntities) AS count FROM entities WHERE name = ?';
-  
-    if (!req.body.name || !req.body.isUser) {
+    if (!req.body.name) {
       res.status(400).json({ error: 'The request has missing information!' });
       return;
     }

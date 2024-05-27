@@ -94,7 +94,6 @@ export default {
 
       // new entity
       newName: '',
-      newIsUser: false,
 
       // current entity
       currentEntity: {
@@ -167,6 +166,40 @@ export default {
             this.showToast = false;
           }, 5000);
         });
+    },
+    insertEntity() {
+        if (this.newName == '') {
+            this.showToast = true;
+            this.toastMessage = 'Name cannot be empty';
+            setTimeout(() => {
+                this.showToast = false;
+            }, 5000);
+            return;
+        }
+        else {
+          axios.post('http://localhost:3000/entities/addEntity', {
+            name: this.newName,
+            isUser: 0,
+          }).then(response => {
+
+            this.newName = '';
+
+            if (response.data.message) {
+              this.showToast = true;
+              this.toastMessage = 'Entity inserted successfully';
+              setTimeout(() => {
+                this.showToast = false;
+              }, 5000);
+              this.getEntities();
+            }
+          }).catch(error => {
+            this.showToast = true;
+            this.toastMessage = error.response.data.error;
+            setTimeout(() => {
+              this.showToast = false;
+            }, 5000);
+          });
+        }
     },
   }
 }
