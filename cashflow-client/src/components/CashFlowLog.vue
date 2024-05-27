@@ -281,8 +281,7 @@ export default {
         updateCashflowLog(log) {
             const token = localStorage.getItem('user-token'); // get the token from local storage
             console.log(JSON.stringify(log));
-            axios.post("http://localhost:3000/cashflowlog/updateLog", {
-                idcashflowLog: log.idcashflowLog,
+            axios.post(`http://localhost:3000/cashflowlog/updateLog/${log.idcashflowLog}`, {
                 idEntity: log.idEntity,
                 type: log.type,
                 value: log.value,

@@ -199,11 +199,17 @@ router.post('/insertLog', function (req, res, next) {
 
 /**
  * @openapi
- * /cashflowlog/updateLog:
+ * /cashflowlog/updateLog/{idcashflowLog}:
  *   post:
  *     tags:
  *      - cashflowlog
  *     description: Updates a cashflow log for a user.
+ *     parameters:
+ *       - in: path
+ *         name: idcashflowLog
+ *         schema:
+ *           type: integer
+ *         required: true
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -272,12 +278,17 @@ router.post('/insertLog', function (req, res, next) {
  *                   type: string
  */
 
-router.post('/updateLog', function (req, res, next) {
+router.post('/updateLog/:idcashflowLog', function (req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         res.status(401).json({ error: 'No authorization header' });
         return;
     }
+
+    if (!req.params.idcashflowLog) {
+        res.status(400).json({ error: 'The request has missing information!' });
+        return;
+      }
 
     const token = authHeader.split(' ')[1]; // get the token from the Authorization header
     let userId;
@@ -288,7 +299,7 @@ router.post('/updateLog', function (req, res, next) {
         res.status(401).json({ success: false, error: 'Invalid token' });
         return;
     }
-    const idcashflowLog = req.body.idcashflowLog,
+    const idcashflowLog = req.params.idcashflowLog,
     idEntity = req.body.idEntity,
     type = req.body.type,
     value = req.body.value,
