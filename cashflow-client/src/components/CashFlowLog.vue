@@ -159,8 +159,7 @@
                                 <span class="input-group-text" id="inputGroup-sizing-default">Date</span>
                             </div>
                             <input type="datetime-local" class="date-input form-control" aria-label="Value"
-                                aria-describedby="inputGroup-sizing-default" v-model="dateInsert"
-                                @change="inputChanging()">
+                                aria-describedby="inputGroup-sizing-default" v-model="dateInsert">
                         </div>
                     </div>
 

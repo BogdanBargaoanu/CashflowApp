@@ -34,6 +34,36 @@
       </div>
     </div>
   </div>
+  <button type="button" class="btn-insert" data-bs-toggle="modal" data-bs-target="#insertModal">Insert</button>
+  <!-- MODAL POPUP -->
+  <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="InsertPopup" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="InsertPopup">Insert entity</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <!-- NAME INSERT -->
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+            </div>
+            <input id="nameInsert" type="text" class="value-input form-control" aria-label="Name"
+              aria-describedby="input-Group-sizing-default" v-model="newName">
+          </div>
+
+          <!-- BUTTONS FOR MODAL -->
+          <div class="modal-footer">
+            <button type="button" class="btn-cashflow-close" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn-save" @click="insertEntity()">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <button @click="logout()" class="btn-logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout</button>
   <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
@@ -61,14 +91,19 @@ export default {
       showToast: false,
       toastMessage: '',
       showButton: false,
-      
+
+      // new entity
+      newName: '',
+      newIsUser: false,
+
       // current entity
       currentEntity: {
         idEntities: 0,
         name: '',
         isUser: false,
       },
-    };
+
+    }
   },
   created() {
     this.getEntities();
@@ -98,7 +133,7 @@ export default {
           entity.name = this.currentEntity.name;
           console.log(entity);
           console.log(this.currentEntity);
-          
+
           this.currentEntity = {
             idEntities: 0,
             name: '',
