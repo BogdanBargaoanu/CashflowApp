@@ -10,8 +10,8 @@
             :data-bs-target="'#collapse' + entity.idEntities" aria-expanded="false"
             :aria-controls="'collapse' + entity.idEntities">
             Entity ID: {{ entity.idEntities }} &nbsp;
-            Name: {{ entity.name }}
-            User: {{ entity.isUser }}
+            Name: {{ entity.name }} &nbsp;
+            User:&nbsp; <b :class="{'text-success': entity.isUser, 'text-danger': !entity.isUser}">{{ getUserStatus(entity.isUser) }}</b>
           </button>
         </h2>
 
@@ -64,7 +64,6 @@
     </div>
   </div>
 
-
   <button @click="logout()" class="btn-logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout</button>
   <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
     :class="{ 'show': showToast }" style="position: absolute; top: 0; right: 0;">
@@ -114,6 +113,9 @@ export default {
     },
     inputChanging() {
       this.showButton = true;
+    },
+    getUserStatus(isUser) {
+        return isUser ? 'YES' : 'NO';
     },
     getEntities() {
       axios.get('http://localhost:3000/entities')

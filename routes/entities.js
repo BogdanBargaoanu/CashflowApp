@@ -135,7 +135,7 @@ router.post('/addEntity', function (req, res, next) {
 
 /**
  * @openapi
- * /entities/updateEntity:
+ * /entities/updateEntity/{idEntities}:
  *   post:
  *     tags:
  *       - entities
@@ -237,6 +237,72 @@ router.post('/updateEntity/:idEntities', function (req, res, next) {
       });
     });
   });
+
+/**
+ * @openapi
+ * /entities/deleteEntity/{idEntities}:
+ *   delete:
+ *     tags:
+ *       - entities
+ *     description: Delete an entity.
+ *     parameters:
+ *       - in: path
+ *         name: idEntities
+ *         schema:
+ *           type: integer
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Entity deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error caused by an inappropriate input.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ * */
+
+router.delete('/deleteEntity/:idEntities', function (req, res, next) {
+  const deleteQuery = 'DELETE FROM entities WHERE idEntities = ?';
+
+  if (!req.params.idEntities) {
+    res.status(400).json({ error: 'The request has missing information!' });
+    return;
+  }
+
+  req.db.query(deleteQuery, [req.params.idEntities], (err, result) => {
+      if (err) {
+          res.status(500).json({ error: err.message });
+          return;
+      }
+
+      if (result.affectedRows == 0) {
+          res.status(400).json({ error: 'No entity found with the provided id!' });
+          return;
+      }
+
+      res.json({ message: 'Entity deleted successfully!' });
+  });
+});
 
 
 module.exports = router;
