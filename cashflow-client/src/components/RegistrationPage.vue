@@ -1,28 +1,43 @@
 <template>
-<div id="content">
-    <form @submit.prevent="register">
-      <div class="form">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" v-model="username" id="username" class="form-control" required>
+  <div class="container-fluid login-container">
+    <form class="main-form">
+      <h1 class="text-center">Register</h1>
+      <div class="mb-3">
+        <label for="inputUsername" class="form-label">Username</label>
+        <input v-model="username" type="text" class="form-control" id="inputUsername" required>
       </div>
-      <div class="form">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" v-model="password" id="password" class="form-control" required>
+      <div class="mb-3">
+        <label for="inputRepeatPassword" class="form-label">Password</label>
+        <input v-model="repeatPassword" type="password" class="form-control" id="inputRepeatPassword" aria-describedby="pwHelp"
+          required>
       </div>
-      <button type="submit" class="btn btn-primary">Register</button>
+      <div class="mb-3">
+        <label for="inputPassword" class="form-label">Repeat password</label>
+        <input v-model="password" type="password" class="form-control" id="inputPassword" aria-describedby="pwHelp"
+          required>
+      </div>
+      <div id="pwHelp" class="form-text">We'll never share your password with anyone else.</div>
+      <!--<div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+      </div> -->
+      <button @click="register($event)" type="submit" class="btn btn-primary">Register</button>
     </form>
 
-  <form @submit.prevent="addUser">
-      <div class="form">
-        <label for="newUsername" class="form-label">New Username</label>
-        <input type="text" v-model="newUsername" id="newUsername" class="form-control" required>
+
+
+
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
+      :class="{ 'show': showToast }" style="position: absolute; top: 0; right: 0;">
+      <div class="toast-header">
+        <strong class="me-auto">Notification</strong>
+        <button type="button" class="m1-2 mb-1 btn-close" @click="showToast = false"></button>
       </div>
-      <div class="form">
-        <label for="newPassword" class="form-label">New Password</label>
-        <input type="password" v-model="newPassword" id="newPassword" class="form-control" required>
+      <div class="toast-body">
+        {{ toastMessage }}
       </div>
-      <button type="submit" class="btn btn-primary">Add User</button>
-    </form>
+    </div>
+
   </div>
 </template>
 
@@ -30,54 +45,61 @@
 import axios from 'axios';
 
 export default {
-  name: 'RegistrationPage',
+  name: 'UserLogin',
+  props: {
+    msg: String
+  },
   data() {
     return {
       username: '',
       password: '',
+      repeatPassword: '',
       showToast: false,
       toastMessage: ''
     };
   },
   methods: {
-    register() {
-      axios.post('http://localhost:3000/users/register', {
+    register(event) {
+      event.preventDefault();
+      if (this.password !== this.repeatPassword) {
+        this.toastMessage = 'Passwords do not match!';
+        this.showToast = true;
+
+        setTimeout(() => {
+          this.showToast = false;
+        }, 5000);
+
+        return;
+      }
+
+      axios.post('http://localhost:3000/users/addUser', {
         username: this.username,
         password: this.password
       })
-      .then(response => {
-        if (response.data.success) {
-          this.toastMessage = 'Registration successful!';
+        .then(response => {
+          if (response.data.success) {
+            // The registration was successful
+            this.$router.push('/login');
+          }
+        })
+        .catch(error => {
+          this.toastMessage = 'Invalid registration: ' + error.response.data.error;
           this.showToast = true;
-          this.$router.push('/login');
-        } else {
-          this.toastMessage = 'Registration failed: ' + response.data.message;
-          this.showToast = true;
-        }
-      })
-      .catch(error => {
-        this.toastMessage = 'Error during registration: ' + error.message;
-        this.showToast = true;
-      });
-    },
-    addUser() {
-      if (this.newUsername.trim() !== "" && this.newPassword.trim() !== "") {
-        const newUser = { username: this.newUsername, password: this.newPassword };
-        axios.post("http://localhost:3000/users/addUser", newUser)
-          .then(response => {
-            console.log("User added successfully:", response.data);
-           
-            this.newUsername = "";
-            this.newPassword = "";
-          })
-          .catch(error => {
-            console.error("Error adding user:", error);
-           
-          });
-      } else {
-        alert("Please enter valid username and password!");
-      }
+
+          setTimeout(() => {
+            this.showToast = false;
+          }, 5000);
+        });
     }
   }
 }
 </script>
+
+<style scoped>
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+</style>

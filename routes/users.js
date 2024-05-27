@@ -66,6 +66,8 @@ router.get('/', function (req, res, next) {
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
  *                 message:
  *                   type: string
  *       400:
@@ -75,6 +77,8 @@ router.get('/', function (req, res, next) {
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
  *                 error:
  *                   type: string
  *       500:
@@ -84,6 +88,8 @@ router.get('/', function (req, res, next) {
  *             schema:
  *               type: object
  *               properties:
+ *                 success:
+ *                   type: boolean
  *                 error:
  *                   type: string
  * */
@@ -93,23 +99,23 @@ router.post('/addUser', function (req, res, next) {
   const checkUsername = 'SELECT COUNT(idUsers) AS count FROM users WHERE username = ?';
 
   if (!req.body.username || !req.body.password) {
-    res.status(400).json({ error: 'The request must have an username and password!' });
+    res.status(400).json({ success: false, error: 'The request must have an username and password!' });
     return;
   }
   if (req.body.username.length < 5) {
-    res.status(400).json({ error: 'The username must have at least 5 characters!' });
+    res.status(400).json({ success: false, error: 'The username must have at least 5 characters!' });
     return;
   }
   if (req.body.password.length < 5) {
-    res.status(400).json({ error: 'The password must have at least 5 characters!' });
+    res.status(400).json({ success: false, error: 'The password must have at least 5 characters!' });
     return;
   }
   if (req.body.username.length > 30) {
-    res.status(400).json({ error: 'The username must have at most 30 characters!' });
+    res.status(400).json({ success: false, error: 'The username must have at most 30 characters!' });
     return;
   }
   if (req.body.password.length > 30) {
-    res.status(400).json({ error: 'The password must have at most 30 characters!' });
+    res.status(400).json({ success: false, error: 'The password must have at most 30 characters!' });
     return;
   }
 
@@ -123,23 +129,23 @@ router.post('/addUser', function (req, res, next) {
   req.db.beginTransaction((err) => {
 
     if (err) {
-      res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
       return;
     }
 
     req.db.query(checkUsername, [req.body.username], (err, result) => {
       if (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ success: false, error: err.message });
         return;
       }
       if (result[0]['count'] > 0) {
-        res.status(400).json({ error: 'The username already exists!' });
+        res.status(400).json({ success: false, error: 'The username already exists!' });
         return;
       }
 
       req.db.query(insertQuery, [req.body.username, req.body.password], (err, result) => {
         if (err) {
-          res.status(500).json({ error: err.message });
+          res.status(500).json({ success: false, error: err.message });
           return;
         }
 
@@ -149,7 +155,7 @@ router.post('/addUser', function (req, res, next) {
               res.status(500).json({ error: err.message });
             });
           }
-          res.json({ message: 'User added successfully!' });
+          res.json({ success: true, message: 'User added successfully!' });
         });
       });
     });
