@@ -12,7 +12,7 @@
                         :aria-controls="'collapse' + log.idcashflowLog">
                         Transaction ID: {{ log.idcashflowLog }} &nbsp;<b
                             :class="{ 'text-danger': log.type == 'Expense', 'text-success': log.type == 'Income' }">{{
-                                log.type }}</b>
+                log.type }}</b>
                         &nbsp;
                         Name: {{ log.name }} Value: {{ log.value }} Currency: {{ log.currency }}
                         Date: {{ log.date }}
@@ -34,7 +34,7 @@
                                 @change="inputChanging()">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
                                     {{
-                                        entity.name }}</option>
+                entity.name }}</option>
                             </select>
                         </div>
 
@@ -115,7 +115,7 @@
                                 aria-describedby="inputGroup-sizing-default" v-model="idEntityInsert">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
                                     {{
-                                        entity.name }}</option>
+                entity.name }}</option>
                             </select>
                         </div>
 
@@ -209,6 +209,7 @@ export default {
             valueInsert: 0,
             currencyInsert: '',
             dateInsert: '',
+            isUserEntityInsert: false,
 
             // current log
             currentId: 0,
@@ -258,6 +259,14 @@ export default {
                     })
                     .then(response => {
                         //----push the new log to the array a better variant
+                        for (const entity of this.entities) {
+                                if (entity.idEntities == this.idEntityInsert) {
+                                    if (entity.isUser) {
+                                    }
+                                    break;
+                                }
+                            }
+
                         this.idEntityInsert = 0;
                         this.typeInsert = '';
                         this.valueInsert = 0;
@@ -269,9 +278,9 @@ export default {
                             setTimeout(() => {
                                 this.showToast = false;
                             }, 5000);
+                            
                             this.getCashflow();
                         }
-
                     })
                     .catch(error => {
                         this.showToast = true;
@@ -320,7 +329,7 @@ export default {
                         this.showToast = false;
                     }, 5000);
                 });
-                this.showButton = false;
+            this.showButton = false;
         },
         getCashflow() {
             const token = localStorage.getItem('user-token'); // get the token from local storage

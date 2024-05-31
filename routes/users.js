@@ -23,6 +23,15 @@ const jwt = require('jsonwebtoken');
  *                  type: string
  *                 password:
  *                  type: string
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 
 /* GET users listing. */
@@ -35,8 +44,70 @@ router.get('/', function (req, res, next) {
     }
     res.json(result);
   });
-  //res.send('respond with a resource');
 });
+
+/**
+ * @openapi
+ * /users/{name}:
+ *   get:
+ *     tags:
+ *      - users
+ *     description: Gets the user id with the given username.
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Returns the user id.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 iduser:
+ *                   type: integer
+ *                 username:
+ *                  type: string
+ *                 password:
+ *                  type: string
+ *       400:
+ *         description: Error caused by an inappropriate input.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ */
+
+router.get('/:name', function (req, res, next) {
+  const query = 'SELECT idUsers FROM users WHERE username = ?';
+  if (!req.params.name) {
+    res.status(400).json({ error: 'The request has missing information!' });
+    return;
+  }
+  req.db.query(query, [req.params.name], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(result);
+  });
+});
+
 
 /**
  * @openapi
@@ -228,7 +299,7 @@ router.post('/login', function (req, res, next) {
       if (user.password == password) {
         const token = jwt.sign({ id: user.idUsers }, 'cashflow-key', { expiresIn: '24h' });
         //res.cookie('token', token, { httpOnly: true });
-        res.json({ success: true, token: token});
+        res.json({ success: true, token: token });
       } else {
         res.status(401).json({ success: false, message: 'Incorrect login details' });
       }
