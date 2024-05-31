@@ -4,6 +4,8 @@
         <div class="content-box graph-container">
             <div id="linechart"></div>
         </div>
+        <button @click="logout()" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        <button @click="home()" class="btn-home"><i class="fa-solid fa-house"></i> Home</button>
     </div>
 </template>
 <script>
@@ -19,6 +21,10 @@ export default {
         }
     },
     methods: {
+        logout() {
+            localStorage.removeItem('user-token');
+            this.$router.push('/login');
+        },
         drawChart() {
             // Load the Visualization API and the corechart package
             GoogleCharts.load(() => {

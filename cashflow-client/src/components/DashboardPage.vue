@@ -72,7 +72,7 @@ export default {
 
                 // Set chart options
                 var options = {
-                    title: 'Company Performance',
+                    title: 'Account performance',
                     curveType: 'function',
                     legend: { position: 'bottom' },
                 };
@@ -126,5 +126,6 @@ export default {
 #linechart {
     width: 85%;
     margin-left: 10%;
+    margin-top: 3%;
 }
 </style>
