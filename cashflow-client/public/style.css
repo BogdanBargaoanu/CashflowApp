@@ -14,14 +14,15 @@
     --insert-button-color1: rgb(6, 146, 6);
     --inser-button-color2: rgb(34, 255, 107);
     --insert-button-text: rgb(9, 75, 0);
-    --delete-button-color: rgb(160, 0, 0);
+    --delete-button-text: rgb(160, 0, 0);
+    --delete-button-color: rgb(207, 0, 0);
 }
 
 * {
     /* Normalize CSS */
     margin: 0;
     padding: 0;
-    font-family: "Poppins" , sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 #app {
@@ -102,14 +103,15 @@ button[class="btn btn-primary"]:hover::before {
 
 @keyframes slide-up-fade-in {
     0% {
-      transform: translateY(20px);
-      opacity: 0;
+        transform: translateY(20px);
+        opacity: 0;
     }
+
     100% {
-      transform: translateY(0);
-      opacity: 1;
+        transform: translateY(0);
+        opacity: 1;
     }
-  }
+}
 
 /* Dashboard styles */
 .dashboard {
@@ -119,13 +121,17 @@ button[class="btn btn-primary"]:hover::before {
     width: 90vw;
     height: 80vh;
 }
-.dashboard-heading, .cashflowlog-heading, .entities-heading {
+
+.dashboard-heading,
+.cashflowlog-heading,
+.entities-heading {
     width: 100%;
     color: var(--heading-color);
     text-shadow: 6px 6px 6px rgba(14, 14, 14, 0.534);
     animation: slide-up-fade-in 0.5s ease;
     margin-bottom: 20px;
 }
+
 .content-box {
     background-color: white;
     position: relative;
@@ -135,13 +141,19 @@ button[class="btn btn-primary"]:hover::before {
     margin-right: 1rem;
     margin-left: 1rem;
 }
+
 .cb1 {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
     animation: slide-up-fade-in 1s ease;
     transition: transform 0.5s ease;
 }
-.cb1:hover, .cb2:hover, .cb3:hover, .cb4:hover, .cb5:hover{
+
+.cb1:hover,
+.cb2:hover,
+.cb3:hover,
+.cb4:hover,
+.cb5:hover {
     transform: translateY(-10px);
 }
 
@@ -175,7 +187,10 @@ button[class="btn btn-primary"]:hover::before {
     transition: transform 0.5s ease;
 }
 
-.chart-icon, .cashflow-log-icon, .current-info-icon, .categories-graph-icon {
+.chart-icon,
+.cashflow-log-icon,
+.current-info-icon,
+.categories-graph-icon {
     position: sticky;
     float: left;
     margin-left: 1%;
@@ -186,7 +201,8 @@ button[class="btn btn-primary"]:hover::before {
     margin-top: 0.5%;
 }
 
-.cashflow-log-icon, .current-info-icon {
+.cashflow-log-icon,
+.current-info-icon {
     margin-left: 0.5%;
 }
 
@@ -274,4 +290,59 @@ button[class="btn btn-primary"]:hover::before {
 
 .btn-save:hover {
     transform: translateY(-5px);
+}
+
+.btn-delete {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    border: 2px solid rgb(231, 50, 50);
+    background-color: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 10px #333;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.btn-delete:hover {
+    background-color: rgb(245, 207, 207);
+    transform: scale(1.2);
+    box-shadow: 0 0 4px #111;
+    transition: .3s;
+}
+
+svg {
+    color: rgb(231, 50, 50);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: .3s;
+}
+
+.btn-delete:focus svg {
+    opacity: 0;
+    transition: .3s;
+}
+
+.delete-message {
+    width: 150px;
+    position: absolute;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    color: rgb(231, 50, 50);
+    font-weight: 600;
+    transition: .3s;
+}
+
+.btn-delete:focus {
+    width: 150px;
+    height: 50px;
+    transition: .3s;
+}
+
+.btn-delete:focus span {
+    opacity: 1;
+    transition: .3s;
 }

@@ -11,7 +11,8 @@
             :aria-controls="'collapse' + entity.idEntities">
             Entity ID: {{ entity.idEntities }} &nbsp;
             Name: {{ entity.name }} &nbsp;
-            User:&nbsp; <b :class="{'text-success': entity.isUser, 'text-danger': !entity.isUser}">{{ getUserStatus(entity.isUser) }}</b>
+            User:&nbsp; <b :class="{ 'text-success': entity.isUser, 'text-danger': !entity.isUser }">{{
+        getUserStatus(entity.isUser) }}</b>
           </button>
         </h2>
 
@@ -26,6 +27,14 @@
               <input :id="'name' + entity.idEntities" type="text" class="value-input form-control" aria-label="Name"
                 aria-describedby="input-Group-sizing-default" v-model="entity.name" @change="inputChanging()">
             </div>
+            <button class="btn-delete">
+              <span class="delete-message">CONFIRM DELETE</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
             <transition name="fade">
               <button v-if="showButton" @click="updateEntity(entity)" class="btn btn-primary">Update</button>
             </transition>
@@ -115,7 +124,7 @@ export default {
       this.showButton = true;
     },
     getUserStatus(isUser) {
-        return isUser ? 'YES' : 'NO';
+      return isUser ? 'YES' : 'NO';
     },
     getEntities() {
       axios.get('http://localhost:3000/entities')
@@ -170,38 +179,38 @@ export default {
         });
     },
     insertEntity() {
-        if (this.newName == '') {
-            this.showToast = true;
-            this.toastMessage = 'Name cannot be empty';
-            setTimeout(() => {
-                this.showToast = false;
-            }, 5000);
-            return;
-        }
-        else {
-          axios.post('http://localhost:3000/entities/addEntity', {
-            name: this.newName,
-            isUser: 0,
-          }).then(response => {
+      if (this.newName == '') {
+        this.showToast = true;
+        this.toastMessage = 'Name cannot be empty';
+        setTimeout(() => {
+          this.showToast = false;
+        }, 5000);
+        return;
+      }
+      else {
+        axios.post('http://localhost:3000/entities/addEntity', {
+          name: this.newName,
+          isUser: 0,
+        }).then(response => {
 
-            this.newName = '';
+          this.newName = '';
 
-            if (response.data.message) {
-              this.showToast = true;
-              this.toastMessage = 'Entity inserted successfully';
-              setTimeout(() => {
-                this.showToast = false;
-              }, 5000);
-              this.getEntities();
-            }
-          }).catch(error => {
+          if (response.data.message) {
             this.showToast = true;
-            this.toastMessage = error.response.data.error;
+            this.toastMessage = 'Entity inserted successfully';
             setTimeout(() => {
               this.showToast = false;
             }, 5000);
-          });
-        }
+            this.getEntities();
+          }
+        }).catch(error => {
+          this.showToast = true;
+          this.toastMessage = error.response.data.error;
+          setTimeout(() => {
+            this.showToast = false;
+          }, 5000);
+        });
+      }
     },
   }
 }
