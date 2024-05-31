@@ -4,9 +4,15 @@
         <div class="content-box cb1">
             <img src="../assets/dashboard-img/current-info.png" alt="current-info" class="current-info-icon">
             <span class="dashboard-text account">Current account</span>
-            <span class="current-balance" :class="{ 'text-danger': this.currentBalanceLei < 0, 'text-success': this.currentBalanceLei >= 0 }">{{ this.currentBalanceLei }} LEI</span>
-            <span class="current-balance" :class="{ 'text-danger': this.currentBalanceEuro < 0, 'text-success': this.currentBalanceEuro >= 0 }">{{ this.currentBalanceEuro }} EURO</span>
-            <span class="current-balance" :class="{ 'text-danger': this.currentBalanceUSD < 0, 'text-success': this.currentBalanceUSD >= 0 }">{{ this.currentBalanceUSD }} USD</span>
+            <span class="current-balance"
+                :class="{ 'text-danger': accountValues['ron'] < 0, 'text-success': accountValues['ron'] >= 0 }">{{
+                   accountValues['ron'] }} LEI</span>
+            <span class="current-balance"
+                :class="{ 'text-danger': accountValues['eur'] < 0, 'text-success': accountValues['eur']  >= 0 }">{{
+                    accountValues['eur']  }} EURO</span>
+            <span class="current-balance"
+                :class="{ 'text-danger': accountValues['usd']  < 0, 'text-success': accountValues['usd'] >= 0 }">{{
+                    accountValues['usd'] }} USD</span>
         </div>
         <div class="content-box cb2">
             <img src="../assets/dashboard-img/chart-icon.png" alt="chart-icon" class="chart-icon">
@@ -29,13 +35,13 @@
 
 <script>
 import { GoogleCharts } from 'google-charts';
+import axios from 'axios';
 export default {
     name: 'DashboardPage',
     data() {
         return {
-            currentBalanceLei: 0,
-            currentBalanceEuro: 0,
-            currentBalanceUSD: 0
+            accountValues: { ron: 0, eur: 0, usd: 0 },
+            cashflow: [],
         }
     },
     methods: {
@@ -74,13 +80,42 @@ export default {
             }, { packages: ['corechart'] });
         },
         getCurrentBalance() {
+            const token = localStorage.getItem('user-token'); // get the token from local storage
+            axios.get('http://localhost:3000/cashflowlog', {
+                headers: {
+                    Authorization: `Bearer ${token}` // send the token in the Authorization header
+                }
+            })
+                .then(response => {
+                    this.cashflow = response.data;
+                    for (let log of this.cashflow) {
+                            if (log.type.toLowerCase() == 'income') {
+                                this.accountValues[log.currency.toLowerCase()] += log.value;
+                            } else if (log.type.toLowerCase() == 'expense') {
+                                this.accountValues[log.currency.toLowerCase()] -= log.value;
+                            }
+                    }
+                })
+                .catch(error => {
+                    localStorage.removeItem('user-token');
+                    this.toastMessage = 'Invalid login: ' + error.response.data.message;
+                    this.showToast = true;
 
-        }
+                    setTimeout(() => {
+                        this.showToast = false;
+                    }, 5000);
+                    this.$router.push('/login');
+                    return;
+                });
+        },
     },
     mounted() {
         // Draw the chart when the component is mounted
         this.drawChart();
     },
+    created() {
+        this.getCurrentBalance();
+    }
 }
 </script>
 

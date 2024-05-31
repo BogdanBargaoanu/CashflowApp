@@ -316,6 +316,7 @@ export default {
                         this.showToast = false;
                     }, 5000);
                 });
+                this.showButton = false;
         },
         getCashflow() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
