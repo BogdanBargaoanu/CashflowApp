@@ -16,6 +16,8 @@
     --insert-button-text: rgb(9, 75, 0);
     --delete-button-text: rgb(160, 0, 0);
     --delete-button-color: rgb(207, 0, 0);
+    --home-button-color: rgb(85, 212, 0);
+    --home-button-text: rgb(0, 121, 10);
 }
 
 * {
@@ -158,7 +160,7 @@ button[class="btn btn-primary"]:hover::before {
     transform: translateY(-10px);
 }
 
-.btn-logout:hover {
+.btn-logout:hover, .btn-home:hover {
     transform: translateY(-5px);
 }
 
@@ -214,6 +216,23 @@ button[class="btn btn-primary"]:hover::before {
     background-color: var(--logout-color);
     color: var(--logout-color-text);
     border-color: var(--logout-color-text);
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 2px 2px 2px 1px var(--box-shadow-color);
+    animation: slide-up-fade-in 1s ease;
+    transition: transform 0.5s ease;
+}
+
+.btn-home {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background-color: var(--home-button-color);
+    color: var(--home-button-text);
+    border-color: var(--home-button-text);
     border-radius: 1rem;
     padding: 0.5rem 1rem;
     font-size: 1rem;

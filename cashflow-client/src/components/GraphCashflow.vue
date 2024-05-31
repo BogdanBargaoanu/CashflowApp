@@ -25,6 +25,9 @@ export default {
             localStorage.removeItem('user-token');
             this.$router.push('/login');
         },
+        home() {
+            this.$router.push('/dashboard');
+        },
         drawChart() {
             // Load the Visualization API and the corechart package
             GoogleCharts.load(() => {
