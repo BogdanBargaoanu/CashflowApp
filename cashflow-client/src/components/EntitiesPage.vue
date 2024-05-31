@@ -74,6 +74,8 @@
   </div>
 
   <button @click="logout()" class="btn-logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+  <button @click="home()" class="btn-home"><i class="fa-solid fa-house"></i> Home</button>
+
   <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
     :class="{ 'show': showToast }" style="position: absolute; top: 0; right: 0;">
     <div class="toast-header">
@@ -121,6 +123,9 @@ export default {
     logout() {
       localStorage.removeItem('user-token');
       this.$router.push('/login');
+    },
+    home() {
+      this.$router.push('/dashboard');
     },
     inputChanging() {
       this.showButton = true;
