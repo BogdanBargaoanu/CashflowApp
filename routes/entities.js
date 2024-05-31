@@ -282,7 +282,7 @@ router.post('/updateEntity/:idEntities', function (req, res, next) {
  * */
 
 router.delete('/deleteEntity/:idEntities', function (req, res, next) {
-  const deleteQuery = 'DELETE FROM entities WHERE idEntities = ?';
+  const deleteQuery = 'DELETE FROM entities WHERE idEntities = ? AND isUser = 0';
 
   if (!req.params.idEntities) {
     res.status(400).json({ error: 'The request has missing information!' });
@@ -296,7 +296,7 @@ router.delete('/deleteEntity/:idEntities', function (req, res, next) {
       }
 
       if (result.affectedRows == 0) {
-          res.status(400).json({ error: 'No entity found with the provided id!' });
+          res.status(400).json({ error: 'No entity found with the provided ID or cannot delete that entity!' });
           return;
       }
 
