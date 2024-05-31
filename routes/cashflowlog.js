@@ -199,6 +199,125 @@ router.post('/insertLog', function (req, res, next) {
 
 /**
  * @openapi
+ * /cashflowlog/insertLogTransfer:
+ *   post:
+ *     tags:
+ *      - cashflowlog
+ *     description: Inserts a new cashflow log for a user.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type:
+ *                 type: string
+ *               value:
+ *                 type: number
+ *               currency:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *               idUser:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Returns a success message.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Bad request. Missing required fields or value is not greater than 0.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized. No authorization header or invalid token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ */
+
+router.post('/insertLogTransfer', function (req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        res.status(401).json({ error: 'No authorization header' });
+        return;
+    }
+
+    const token = authHeader.split(' ')[1]; // get the token from the Authorization header
+    let entityId; // user that initiated the transfer
+    try {
+        const decoded = jwt.verify(token, 'cashflow-key'); // verify the token
+        entityId = decoded.idEntities; // get the entity ID from the decoded token
+    } catch (err) {
+        res.status(401).json({ success: false, error: 'Invalid token' });
+        return;
+    }
+    const { type, value, currency, date, idUser } = req.body;
+    if (!type || !value || !currency /*|| !description*/ || !date || !idUser) {
+        res.status(400).json({ success: false, error: 'Missing required fields' });
+        return;
+    }
+    if (value <= 0) {
+        res.status(400).json({ success: false, error: 'Value must be greater than 0' });
+        return;
+    }
+    //console.log(userId," ", idEntity," ", type," ", value," ", currency," ", date);
+    if (type != "Income" && type != "Expense") {
+        res.status(400).json({ success: false, error: 'Invalid type' });
+        return;
+    }
+    if (currency != "USD" && currency != "EUR" && currency != "RON") {
+        res.status(400).json({ success: false, error: 'Invalid currency' });
+        return;
+    }
+    const query = `INSERT INTO cashflowlog (idUser, idEntity, type, value, currency, date) VALUES (?, ?, ?, ?, ?, ?)`;
+    req.db.query(query, [idUser, entityId, type, value, currency, date], (err, result) => {
+        if (err) {
+            res.status(500).json({ success: false, error: err.message });
+            return;
+        }
+        res.json({ success: true, message: 'Cashflow log inserted successfully' });
+    });
+});
+
+/**
+ * @openapi
  * /cashflowlog/updateLog/{idcashflowLog}:
  *   post:
  *     tags:

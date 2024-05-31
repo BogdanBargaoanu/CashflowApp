@@ -297,9 +297,19 @@ router.post('/login', function (req, res, next) {
     if (results.length > 0) {
       const user = results[0];
       if (user.password == password) {
-        const token = jwt.sign({ id: user.idUsers }, 'cashflow-key', { expiresIn: '24h' });
-        //res.cookie('token', token, { httpOnly: true });
-        res.json({ success: true, token: token });
+        const entitiesQuery = 'SELECT * FROM entities WHERE name = ?';
+        let idEntities = -1;
+        req.db.query(entitiesQuery, [username], (err, entitiesResults) => {
+          if (err) {
+            res.status(500).json({ success: false, message: err.message });
+            return;
+          }
+          if (entitiesResults.length > 0) {
+            idEntities = entitiesResults[0].idEntities;
+          }
+          const token = jwt.sign({ id: user.idUsers, idEntities: idEntities }, 'cashflow-key', { expiresIn: '24h' });
+          res.json({ success: true, token: token });
+        });
       } else {
         res.status(401).json({ success: false, message: 'Incorrect login details' });
       }

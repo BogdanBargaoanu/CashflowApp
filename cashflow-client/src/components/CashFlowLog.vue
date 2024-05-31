@@ -94,7 +94,8 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn-insert" data-bs-toggle="modal" data-bs-target="#insertModal">Insert</button>
+        <button type="button" class="btn-insert" data-bs-toggle="modal" data-bs-target="#insertModal"
+            @click="resetInsertInfo()">Insert</button>
 
         <!-- MODAL POPUP -->
         <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="InsertPopup" aria-hidden="true">
@@ -209,7 +210,6 @@ export default {
             valueInsert: 0,
             currencyInsert: '',
             dateInsert: '',
-            isUserEntityInsert: false,
 
             // current log
             currentId: 0,
@@ -234,6 +234,13 @@ export default {
         },
         inputChanging() {
             this.showButton = true;
+        },
+        resetInsertInfo() {
+            this.idEntityInsert = 0;
+            this.typeInsert = '';
+            this.valueInsert = 0;
+            this.currencyInsert = '';
+            this.dateInsert = '';
         },
         insertCashflowLog() {
             //console.log(this.idEntityInsert, this.typeInsert, this.valueInsert, this.currencyInsert, this.dateInsert);
@@ -260,25 +267,58 @@ export default {
                     .then(response => {
                         //----push the new log to the array a better variant
                         for (const entity of this.entities) {
-                                if (entity.idEntities == this.idEntityInsert) {
-                                    if (entity.isUser) {
-                                    }
-                                    break;
+                            if (entity.idEntities == this.idEntityInsert) {
+                                if (entity.isUser) {
+                                    console.log(1);
+                                    axios.get(`http://localhost:3000/users/${entity.name}`)
+                                        .then(response => {
+                                            console.log(response.data);
+                                            if (response.data[0].idUsers != null) {
+                                                let idEntityUser = response.data[0].idUsers;
+                                                let typeReverse;
+                                                if (this.typeInsert == 'Income') {
+                                                    typeReverse = 'Expense';
+                                                } else {
+                                                    typeReverse = 'Income';
+                                                }
+                                                console.log(idEntityUser, typeReverse, this.valueInsert, this.currencyInsert, this.dateInsert);
+                                                axios.post("http://localhost:3000/cashflowlog/insertLogTransfer", {
+                                                    type: typeReverse,
+                                                    value: this.valueInsert,
+                                                    currency: this.currencyInsert,
+                                                    date: this.dateInsert,
+                                                    idUser: idEntityUser,
+                                                },
+                                                    {
+                                                        headers: {
+                                                            Authorization: `Bearer ${token}` // send the token in the Authorization header
+                                                        }
+                                                    })
+                                                    .then(response => {
+                                                        if (response.data.success) {
+                                                            console.log('Transfer recorded successfully for the selected user!');
+                                                        }
+                                                    })
+                                                    .catch(error => {
+                                                        console.error(error);
+                                                    });
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error(error);
+                                        });
                                 }
+                                break;
                             }
+                        }
 
-                        this.idEntityInsert = 0;
-                        this.typeInsert = '';
-                        this.valueInsert = 0;
-                        this.currencyInsert = '';
-                        this.dateInsert = '';
                         if (response.data.success) {
                             this.showToast = true;
                             this.toastMessage = 'Log inserted successfully';
                             setTimeout(() => {
                                 this.showToast = false;
                             }, 5000);
-                            
+
                             this.getCashflow();
                         }
                     })
@@ -290,6 +330,7 @@ export default {
                         }, 5000);
                     });
             }
+
         },
         updateCashflowLog(log) {
             const token = localStorage.getItem('user-token'); // get the token from local storage
