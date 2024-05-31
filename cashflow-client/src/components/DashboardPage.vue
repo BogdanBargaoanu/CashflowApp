@@ -43,6 +43,9 @@ export default {
         return {
             accountValues: { ron: 0, eur: 0, usd: 0 },
             cashflow: [],
+            chart: null,
+            chartData: null,
+            chartOptions: null,
         }
     },
     methods: {
@@ -61,27 +64,39 @@ export default {
         },
         drawChart() {
             // Load the Visualization API and the corechart package
-            GoogleCharts.load(() => {
-                // Create the data table
-                var data = GoogleCharts.api.visualization.arrayToDataTable([
-                    ['Year', 'Sales', 'Expenses'],
-                    ['2004', 1000, 400],
-                    ['2005', 1170, 460],
-                    ['2006', 660, 1120],
-                    ['2007', 1030, 540],
-                ]);
+    GoogleCharts.load(() => {
+        // Create the data table
+        var data = GoogleCharts.api.visualization.arrayToDataTable([
+            ['Year', 'Sales', 'Expenses'],
+            ['2004', 1000, 400],
+            ['2005', 1170, 460],
+            ['2006', 660, 1120],
+            ['2007', 1030, 540],
+        ]);
 
-                // Set chart options
-                var options = {
-                    title: 'Account performance',
-                    curveType: 'function',
-                    legend: { position: 'bottom' },
-                };
+        // Set chart options
+        var options = {
+            title: 'Account performance',
+            curveType: 'function',
+            legend: { position: 'bottom' },
+        };
 
-                // Instantiate and draw our chart, passing in some options
-                var chart = new GoogleCharts.api.visualization.LineChart(document.getElementById('linechart'));
-                chart.draw(data, options);
-            }, { packages: ['corechart'] });
+        // Instantiate and draw our chart, passing in some options
+        var chart = new GoogleCharts.api.visualization.LineChart(document.getElementById('linechart'));
+        chart.draw(data, options);
+
+        // Save the chart instance and options in the component's data
+        this.chart = chart;
+        this.chartOptions = options;
+        this.chartData = data;
+
+        // Add the resize event listener here
+        window.addEventListener('resize', () => {
+            if (this.chart && this.chartData && this.chartOptions) {
+                this.chart.draw(this.chartData, this.chartOptions);
+            }
+        });
+    });
         },
         getCurrentBalance() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
@@ -126,7 +141,7 @@ export default {
 <style scoped>
 #linechart {
     width: 85%;
-    margin-left: 10%;
+    margin-left: 12%;
     margin-top: 3%;
 }
 </style>
