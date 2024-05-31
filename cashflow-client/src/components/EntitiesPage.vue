@@ -30,7 +30,7 @@
             <button class="btn-delete">
               <span class="delete-message">CONFIRM DELETE</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor" stroke-width="2">
+                stroke="currentColor" stroke-width="2" @click="toggleDeleteConfirmation($event, entity)">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
@@ -103,6 +103,8 @@ export default {
       // new entity
       newName: '',
 
+      showDeleteConfirmation: false,
+
       // current entity
       currentEntity: {
         idEntities: 0,
@@ -154,6 +156,7 @@ export default {
         }
       }
       this.showButton = false;
+      this.showDeleteConfirmation = false;
     },
     updateEntity(entity) {
       axios.post(`http://localhost:3000/entities/updateEntity/${entity.idEntities}`, entity)
@@ -212,6 +215,41 @@ export default {
         });
       }
     },
+    toggleDeleteConfirmation(event, entity) {
+      if (!this.showDeleteConfirmation) {
+        event.stopPropagation();
+        //console.log(this.showDeleteConfirmation);
+        this.showDeleteConfirmation = !this.showDeleteConfirmation;
+        return;
+      }
+      else {
+        this.deleteEntity(entity);
+      }
+      this.showDeleteConfirmation = false;
+    },
+    deleteEntity(entity) {
+      console.log(this.showDeleteConfirmation);
+      if (this.showDeleteConfirmation) {
+        axios.delete(`http://localhost:3000/entities/deleteEntity/${entity.idEntities}`)
+          .then(response => {
+            if (response.data.message) {
+              this.showToast = true;
+              this.toastMessage = 'Entity deleted successfully';
+              setTimeout(() => {
+                this.showToast = false;
+              }, 5000);
+              this.getEntities();
+            }
+          })
+          .catch(error => {
+            this.showToast = true;
+            this.toastMessage = error.response.data.error;
+            setTimeout(() => {
+              this.showToast = false;
+            }, 5000);
+          });
+      }
+    }
   }
 }
 </script>
