@@ -346,3 +346,26 @@ svg {
     opacity: 1;
     transition: .3s;
 }
+
+.dashboard-text {
+    color: var(--background-color1);
+    text-shadow: 6px 6px 6px rgba(14, 14, 14, 0.534);
+    margin-top: 1rem;
+    display: block;
+    font-weight: 700;
+}
+
+.current-balance {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    display: block;
+    font-weight: 700;
+}
+
+.current-balance:nth-child(1) {
+    margin: 0;
+}
+
+.account {
+    margin-bottom: 4rem;
+}
