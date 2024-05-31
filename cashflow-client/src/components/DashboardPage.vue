@@ -6,12 +6,12 @@
             <span class="dashboard-text account">Current account</span>
             <span class="current-balance"
                 :class="{ 'text-danger': accountValues['ron'] < 0, 'text-success': accountValues['ron'] >= 0 }">{{
-                   accountValues['ron'] }} RON</span>
+                    accountValues['ron'] }} RON</span>
             <span class="current-balance"
-                :class="{ 'text-danger': accountValues['eur'] < 0, 'text-success': accountValues['eur']  >= 0 }">{{
-                    accountValues['eur']  }} EURO</span>
+                :class="{ 'text-danger': accountValues['eur'] < 0, 'text-success': accountValues['eur'] >= 0 }">{{
+                    accountValues['eur'] }} EURO</span>
             <span class="current-balance"
-                :class="{ 'text-danger': accountValues['usd']  < 0, 'text-success': accountValues['usd'] >= 0 }">{{
+                :class="{ 'text-danger': accountValues['usd'] < 0, 'text-success': accountValues['usd'] >= 0 }">{{
                     accountValues['usd'] }} USD</span>
         </div>
         <div class="content-box cb2" @click="graph()">
@@ -28,7 +28,8 @@
             <span class="dashboard-text">Categories graphs</span>
         </div>
         <div @click="entities()" class="content-box cb5"><span class="dashboard-text">Entities</span>
-            <i class="fa-solid fa-building entities-display-icon"> / </i><i class="fa-solid fa-user entities-display-icon"></i>
+            <i class="fa-solid fa-building entities-display-icon"> / </i><i
+                class="fa-solid fa-user entities-display-icon"></i>
         </div>
         <button @click="logout()" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>
@@ -64,39 +65,39 @@ export default {
         },
         drawChart() {
             // Load the Visualization API and the corechart package
-    GoogleCharts.load(() => {
-        // Create the data table
-        var data = GoogleCharts.api.visualization.arrayToDataTable([
-            ['Year', 'Sales', 'Expenses'],
-            ['2004', 1000, 400],
-            ['2005', 1170, 460],
-            ['2006', 660, 1120],
-            ['2007', 1030, 540],
-        ]);
+            GoogleCharts.load(() => {
+                // Create the data table
+                var data = GoogleCharts.api.visualization.arrayToDataTable([
+                    ['Year', 'Sales', 'Expenses'],
+                    ['2004', 1000, 400],
+                    ['2005', 1170, 460],
+                    ['2006', 660, 1120],
+                    ['2007', 1030, 540],
+                ]);
 
-        // Set chart options
-        var options = {
-            title: 'Account performance',
-            curveType: 'function',
-            legend: { position: 'bottom' },
-        };
+                // Set chart options
+                var options = {
+                    title: 'Account performance',
+                    curveType: 'function',
+                    legend: { position: 'bottom' },
+                };
 
-        // Instantiate and draw our chart, passing in some options
-        var chart = new GoogleCharts.api.visualization.LineChart(document.getElementById('linechart'));
-        chart.draw(data, options);
+                // Instantiate and draw our chart, passing in some options
+                var chart = new GoogleCharts.api.visualization.LineChart(document.getElementById('linechart'));
+                chart.draw(data, options);
 
-        // Save the chart instance and options in the component's data
-        this.chart = chart;
-        this.chartOptions = options;
-        this.chartData = data;
+                // Save the chart instance and options in the component's data
+                this.chart = chart;
+                this.chartOptions = options;
+                this.chartData = data;
 
-        // Add the resize event listener here
-        window.addEventListener('resize', () => {
-            if (this.chart && this.chartData && this.chartOptions) {
-                this.chart.draw(this.chartData, this.chartOptions);
-            }
-        });
-    });
+                // Add the resize event listener here
+                window.addEventListener('resize', () => {
+                    if (this.chart && this.chartData && this.chartOptions) {
+                        this.chart.draw(this.chartData, this.chartOptions);
+                    }
+                });
+            });
         },
         getCurrentBalance() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
@@ -108,11 +109,11 @@ export default {
                 .then(response => {
                     this.cashflow = response.data;
                     for (let log of this.cashflow) {
-                            if (log.type.toLowerCase() == 'income') {
-                                this.accountValues[log.currency.toLowerCase()] += log.value;
-                            } else if (log.type.toLowerCase() == 'expense') {
-                                this.accountValues[log.currency.toLowerCase()] -= log.value;
-                            }
+                        if (log.type.toLowerCase() == 'income') {
+                            this.accountValues[log.currency.toLowerCase()] += log.value;
+                        } else if (log.type.toLowerCase() == 'expense') {
+                            this.accountValues[log.currency.toLowerCase()] -= log.value;
+                        }
                     }
                 })
                 .catch(error => {

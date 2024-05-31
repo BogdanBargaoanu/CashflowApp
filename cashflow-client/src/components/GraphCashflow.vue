@@ -18,6 +18,9 @@ export default {
             accountValues: { ron: 0, eur: 0, usd: 0 },
             cashflow: [],
             graphData: [['Date', 'RON', 'EUR', 'USD']],
+            chart: null,
+            chartData: null,
+            chartOptions: null,
         }
     },
     methods: {
@@ -45,7 +48,19 @@ export default {
                 // Instantiate and draw our chart, passing in some options
                 var chart = new GoogleCharts.api.visualization.LineChart(document.getElementById('linechart'));
                 chart.draw(data, options);
-            }, { packages: ['corechart'] });
+
+                // Save the chart instance and options in the component's data
+                this.chart = chart;
+                this.chartOptions = options;
+                this.chartData = data;
+
+                // Add the resize event listener here
+                window.addEventListener('resize', () => {
+                    if (this.chart && this.chartData && this.chartOptions) {
+                        this.chart.draw(this.chartData, this.chartOptions);
+                    }
+                });
+            });
         },
         getCurrentInfo() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
