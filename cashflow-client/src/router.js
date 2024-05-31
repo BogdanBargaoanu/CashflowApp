@@ -13,7 +13,7 @@ const routes = [
   { path: '/dashboard', component: DashboardPage, meta: { requiresAuth: true } },
   { path: '/cashflow-log', component: CashFlowLog, meta: { requiresAuth: true } },
   { path: '/entities', component: EntitiesPage, meta: { requiresAuth: true }},
-  { path: '/graph-cashflow', component: GraphCashflow, meta: { requiresAuth: true }}
+  { path: '/graph', component: GraphCashflow, meta: { requiresAuth: true }}
 ];
 
 const router = createRouter({
