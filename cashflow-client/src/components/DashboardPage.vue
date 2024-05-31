@@ -28,6 +28,7 @@
             <span class="dashboard-text">Categories graphs</span>
         </div>
         <div @click="entities()" class="content-box cb5"><span class="dashboard-text">Entities</span>
+            <i class="fa-solid fa-building entities-display-icon"> / </i><i class="fa-solid fa-user entities-display-icon"></i>
         </div>
         <button @click="logout()" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
     </div>

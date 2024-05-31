@@ -412,3 +412,7 @@ svg {
     margin: auto;
 }
 
+.entities-display-icon {
+    margin-top: 20px;
+    font-size: 4.5rem;
+}
