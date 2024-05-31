@@ -6,7 +6,7 @@
             <span class="dashboard-text account">Current account</span>
             <span class="current-balance"
                 :class="{ 'text-danger': accountValues['ron'] < 0, 'text-success': accountValues['ron'] >= 0 }">{{
-                   accountValues['ron'] }} LEI</span>
+                   accountValues['ron'] }} RON</span>
             <span class="current-balance"
                 :class="{ 'text-danger': accountValues['eur'] < 0, 'text-success': accountValues['eur']  >= 0 }">{{
                     accountValues['eur']  }} EURO</span>
@@ -14,7 +14,7 @@
                 :class="{ 'text-danger': accountValues['usd']  < 0, 'text-success': accountValues['usd'] >= 0 }">{{
                     accountValues['usd'] }} USD</span>
         </div>
-        <div class="content-box cb2">
+        <div class="content-box cb2" @click="graph()">
             <img src="../assets/dashboard-img/chart-icon.png" alt="chart-icon" class="chart-icon">
             <div id="linechart"></div>
         </div>
@@ -54,6 +54,9 @@ export default {
         },
         entities() {
             this.$router.push('/entities');
+        },
+        graph() {
+            this.$router.push('/graph');
         },
         drawChart() {
             // Load the Visualization API and the corechart package
