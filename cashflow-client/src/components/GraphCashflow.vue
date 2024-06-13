@@ -1,49 +1,23 @@
 <template>
-    <h1 class="text-center dashboard-heading">Dashboard</h1>
-    <div class="container-fluid dashboard">
-        <div class="content-box cb1">
-            <img src="../assets/dashboard-img/current-info.png" alt="current-info" class="current-info-icon">
-            <span class="dashboard-text account">Current account</span>
-            <span class="current-balance"
-                :class="{ 'text-danger': accountValues['ron'] < 0, 'text-success': accountValues['ron'] >= 0 }">{{
-                    accountValues['ron'] }} RON</span>
-            <span class="current-balance"
-                :class="{ 'text-danger': accountValues['eur'] < 0, 'text-success': accountValues['eur'] >= 0 }">{{
-                    accountValues['eur'] }} EURO</span>
-            <span class="current-balance"
-                :class="{ 'text-danger': accountValues['usd'] < 0, 'text-success': accountValues['usd'] >= 0 }">{{
-                    accountValues['usd'] }} USD</span>
-        </div>
-        <div class="content-box cb2" @click="graph()">
-            <img src="../assets/dashboard-img/chart-icon.png" alt="chart-icon" class="chart-icon">
+    <div class="graph">
+        <h1 class="text-center graph-heading">Graph</h1>
+        <div class="content-box graph-container">
             <div id="linechart"></div>
         </div>
-        <div @click="cashflowLog()" class="content-box cb3">
-            <img src="../assets/dashboard-img/cashflow-log.png" alt="cashflow-log" class="cashflow-log-icon">
-            <span class="dashboard-text">Cashflow</span>
-        </div>
-        <div class="content-box cb4">
-            <img src="../assets/dashboard-img/categories-graph.png" alt="categories-graph"
-                class="categories-graph-icon">
-            <span class="dashboard-text">Categories graphs</span>
-        </div>
-        <div @click="entities()" class="content-box cb5"><span class="dashboard-text">Entities</span>
-            <i class="fa-solid fa-building entities-display-icon"> / </i><i
-                class="fa-solid fa-user entities-display-icon"></i>
-        </div>
         <button @click="logout()" class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        <button @click="home()" class="btn-home"><i class="fa-solid fa-house"></i> Home</button>
     </div>
 </template>
-
 <script>
 import { GoogleCharts } from 'google-charts';
 import axios from 'axios';
 export default {
-    name: 'DashboardPage',
+    name: 'GraphCashflow',
     data() {
         return {
             accountValues: { ron: 0, eur: 0, usd: 0 },
             cashflow: [],
+            graphData: [['Date', 'RON', 'EUR', 'USD']],
             chart: null,
             chartData: null,
             chartOptions: null,
@@ -54,30 +28,19 @@ export default {
             localStorage.removeItem('user-token');
             this.$router.push('/login');
         },
-        cashflowLog() {
-            this.$router.push('/cashflow-log');
-        },
-        entities() {
-            this.$router.push('/entities');
-        },
-        graph() {
-            this.$router.push('/graph');
+        home() {
+            this.$router.push('/dashboard');
         },
         drawChart() {
             // Load the Visualization API and the corechart package
             GoogleCharts.load(() => {
+                //console.log(this.graphData);
                 // Create the data table
-                var data = GoogleCharts.api.visualization.arrayToDataTable([
-                    ['Year', 'Sales', 'Expenses'],
-                    ['2004', 1000, 400],
-                    ['2005', 1170, 460],
-                    ['2006', 660, 1120],
-                    ['2007', 1030, 540],
-                ]);
+                var data = GoogleCharts.api.visualization.arrayToDataTable(this.graphData);
 
                 // Set chart options
                 var options = {
-                    title: 'Account performance',
+                    title: 'Account evolution',
                     curveType: 'function',
                     legend: { position: 'bottom' },
                 };
@@ -99,7 +62,7 @@ export default {
                 });
             });
         },
-        getCurrentBalance() {
+        getCurrentInfo() {
             const token = localStorage.getItem('user-token'); // get the token from local storage
             axios.get('http://localhost:3000/cashflowlog', {
                 headers: {
@@ -114,7 +77,11 @@ export default {
                         } else if (log.type.toLowerCase() == 'expense') {
                             this.accountValues[log.currency.toLowerCase()] -= log.value;
                         }
+
+                        // add the current info to the graph data
+                        this.graphData.push([log.date, this.accountValues['ron'], this.accountValues['eur'], this.accountValues['usd']]);
                     }
+                    this.drawChart();
                 })
                 .catch(error => {
                     localStorage.removeItem('user-token');
@@ -129,21 +96,15 @@ export default {
                 });
         },
     },
-    mounted() {
-
-        // Draw the chart when the component is mounted
-        this.drawChart();
-    },
     created() {
-        this.getCurrentBalance();
+        this.getCurrentInfo();
     }
 }
 </script>
 
 <style scoped>
 #linechart {
-    width: 85%;
-    margin-left: 12%;
-    margin-top: 3%;
+    width: 100%;
+    height: 90%;
 }
 </style>

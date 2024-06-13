@@ -199,11 +199,136 @@ router.post('/insertLog', function (req, res, next) {
 
 /**
  * @openapi
- * /cashflowlog/updateLog:
+ * /cashflowlog/insertLogTransfer:
+ *   post:
+ *     tags:
+ *      - cashflowlog
+ *     description: Inserts a new cashflow log for a user.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               type:
+ *                 type: string
+ *               value:
+ *                 type: number
+ *               currency:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *               idUser:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Returns a success message.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Bad request. Missing required fields or value is not greater than 0.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized. No authorization header or invalid token.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 error:
+ *                   type: string
+ */
+
+router.post('/insertLogTransfer', function (req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        res.status(401).json({ error: 'No authorization header' });
+        return;
+    }
+
+    const token = authHeader.split(' ')[1]; // get the token from the Authorization header
+    let entityId; // user that initiated the transfer
+    try {
+        const decoded = jwt.verify(token, 'cashflow-key'); // verify the token
+        entityId = decoded.idEntities; // get the entity ID from the decoded token
+    } catch (err) {
+        res.status(401).json({ success: false, error: 'Invalid token' });
+        return;
+    }
+    const { type, value, currency, date, idUser } = req.body;
+    if (!type || !value || !currency /*|| !description*/ || !date || !idUser) {
+        res.status(400).json({ success: false, error: 'Missing required fields' });
+        return;
+    }
+    if (value <= 0) {
+        res.status(400).json({ success: false, error: 'Value must be greater than 0' });
+        return;
+    }
+    //console.log(userId," ", idEntity," ", type," ", value," ", currency," ", date);
+    if (type != "Income" && type != "Expense") {
+        res.status(400).json({ success: false, error: 'Invalid type' });
+        return;
+    }
+    if (currency != "USD" && currency != "EUR" && currency != "RON") {
+        res.status(400).json({ success: false, error: 'Invalid currency' });
+        return;
+    }
+    const query = `INSERT INTO cashflowlog (idUser, idEntity, type, value, currency, date) VALUES (?, ?, ?, ?, ?, ?)`;
+    req.db.query(query, [idUser, entityId, type, value, currency, date], (err, result) => {
+        if (err) {
+            res.status(500).json({ success: false, error: err.message });
+            return;
+        }
+        res.json({ success: true, message: 'Cashflow log inserted successfully' });
+    });
+});
+
+/**
+ * @openapi
+ * /cashflowlog/updateLog/{idcashflowLog}:
  *   post:
  *     tags:
  *      - cashflowlog
  *     description: Updates a cashflow log for a user.
+ *     parameters:
+ *       - in: path
+ *         name: idcashflowLog
+ *         schema:
+ *           type: integer
+ *         required: true
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -272,12 +397,17 @@ router.post('/insertLog', function (req, res, next) {
  *                   type: string
  */
 
-router.post('/updateLog', function (req, res, next) {
+router.post('/updateLog/:idcashflowLog', function (req, res, next) {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         res.status(401).json({ error: 'No authorization header' });
         return;
     }
+
+    if (!req.params.idcashflowLog) {
+        res.status(400).json({ error: 'The request has missing information!' });
+        return;
+      }
 
     const token = authHeader.split(' ')[1]; // get the token from the Authorization header
     let userId;
@@ -288,7 +418,7 @@ router.post('/updateLog', function (req, res, next) {
         res.status(401).json({ success: false, error: 'Invalid token' });
         return;
     }
-    const idcashflowLog = req.body.idcashflowLog,
+    const idcashflowLog = req.params.idcashflowLog,
     idEntity = req.body.idEntity,
     type = req.body.type,
     value = req.body.value,
@@ -322,3 +452,71 @@ router.post('/updateLog', function (req, res, next) {
 });
 
 module.exports = router;
+
+
+/**
+ * @openapi
+ * /cashflowlog/deleteLog/{idcashflowLog}:
+ *   delete:
+ *     tags:
+ *       - cashflowlog
+ *     description: Delete a cashflow log.
+ *     parameters:
+ *       - in: path
+ *         name: idcashflowLog
+ *         schema:
+ *           type: integer
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Log deleted successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error caused by an inappropriate input.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ * */
+
+router.delete('/deleteLog/:idcashflowLog', function (req, res, next) {
+    const deleteQuery = 'DELETE FROM cashflowlog WHERE idcashflowLog = ?';
+  
+    if (!req.params.idcashflowLog) {
+      res.status(400).json({ error: 'The request has missing information!' });
+      return;
+    }
+  
+    req.db.query(deleteQuery, [req.params.idcashflowLog], (err, result) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+  
+        if (result.affectedRows == 0) {
+            res.status(400).json({ error: 'No cashflow log found with the provided id!' });
+            return;
+        }
+  
+        res.json({ message: 'Log deleted successfully!' });
+    });
+  });
+  
