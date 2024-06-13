@@ -130,6 +130,7 @@ export default {
         },
     },
     mounted() {
+
         // Draw the chart when the component is mounted
         this.drawChart();
     },

@@ -25,14 +25,14 @@ var router = express.Router();
  */
 
 router.get('/', function (req, res, next) {
-    const query = `SELECT * FROM entities`;
-    req.db.query(query, (err, result) => {
-        if (err) {
-            res.status(500).json({ error: err.message });
-            return;
-        }
-        res.json(result);
-    });
+  const query = `SELECT * FROM entities`;
+  req.db.query(query, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(result);
+  });
 });
 
 /**
@@ -83,55 +83,55 @@ router.get('/', function (req, res, next) {
  * */
 
 router.post('/addEntity', function (req, res, next) {
-    const insertQuery = 'INSERT INTO entities (name, isUser) VALUES (?, ?)';
-    const checkName = 'SELECT COUNT(idEntities) AS count FROM entities WHERE name = ?';
-    if (!req.body.name) {
-      res.status(400).json({ error: 'The request has missing information!' });
+  const insertQuery = 'INSERT INTO entities (name, isUser) VALUES (?, ?)';
+  const checkName = 'SELECT COUNT(idEntities) AS count FROM entities WHERE name = ?';
+  if (!req.body.name) {
+    res.status(400).json({ error: 'The request has missing information!' });
+    return;
+  }
+  if (req.body.name.length < 5) {
+    res.status(400).json({ error: 'The name must have at least 5 characters!' });
+    return;
+  }
+  if (req.body.name.length > 100) {
+    res.status(400).json({ error: 'The name must have at most 100 characters!' });
+    return;
+  }
+  req.db.beginTransaction((err) => {
+
+    if (err) {
+      res.status(500).json({ error: err.message });
       return;
     }
-    if (req.body.name.length < 5) {
-      res.status(400).json({ error: 'The name must have at least 5 characters!' });
-      return;
-    }
-    if (req.body.name.length > 100) {
-      res.status(400).json({ error: 'The name must have at most 100 characters!' });
-      return;
-    }
-    req.db.beginTransaction((err) => {
-  
+
+    req.db.query(checkName, [req.body.name], (err, result) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-  
-      req.db.query(checkName, [req.body.name], (err, result) => {
+      if (result[0]['count'] > 0) {
+        res.status(400).json({ error: 'The entity already exists!' });
+        return;
+      }
+
+      req.db.query(insertQuery, [req.body.name, req.body.isUser], (err, result) => {
         if (err) {
           res.status(500).json({ error: err.message });
           return;
         }
-        if (result[0]['count'] > 0) {
-          res.status(400).json({ error: 'The entity already exists!' });
-          return;
-        }
-  
-        req.db.query(insertQuery, [req.body.name, req.body.isUser], (err, result) => {
+
+        req.db.commit((err) => {
           if (err) {
-            res.status(500).json({ error: err.message });
-            return;
+            return req.db.rollback(() => {
+              res.status(500).json({ error: err.message });
+            });
           }
-  
-          req.db.commit((err) => {
-            if (err) {
-              return req.db.rollback(() => {
-                res.status(500).json({ error: err.message });
-              });
-            }
-            res.json({ message: 'Entity added successfully!' });
-          });
+          res.json({ message: 'Entity added successfully!' });
         });
       });
     });
   });
+});
 
 /**
  * @openapi
@@ -187,56 +187,56 @@ router.post('/addEntity', function (req, res, next) {
  * */
 
 router.post('/updateEntity/:idEntities', function (req, res, next) {
-    const updateQuery = 'UPDATE entities SET name = ? WHERE idEntities = ?';
-    const checkName = 'SELECT COUNT(idEntities) AS count FROM entities WHERE name = ?';
-  
-    if (!req.body.name || !req.params.idEntities) {
-      res.status(400).json({ error: 'The request has missing information!' });
+  const updateQuery = 'UPDATE entities SET name = ? WHERE idEntities = ?';
+  const checkName = 'SELECT COUNT(idEntities) AS count FROM entities WHERE name = ?';
+
+  if (!req.body.name || !req.params.idEntities) {
+    res.status(400).json({ error: 'The request has missing information!' });
+    return;
+  }
+  if (req.body.name.length < 5) {
+    res.status(400).json({ error: 'The name must have at least 5 characters!' });
+    return;
+  }
+  if (req.body.name.length > 100) {
+    res.status(400).json({ error: 'The name must have at most 100 characters!' });
+    return;
+  }
+  req.db.beginTransaction((err) => {
+
+    if (err) {
+      res.status(500).json({ error: err.message });
       return;
     }
-    if (req.body.name.length < 5) {
-      res.status(400).json({ error: 'The name must have at least 5 characters!' });
-      return;
-    }
-    if (req.body.name.length > 100) {
-      res.status(400).json({ error: 'The name must have at most 100 characters!' });
-      return;
-    }
-    req.db.beginTransaction((err) => {
-  
+
+    req.db.query(checkName, [req.body.name], (err, result) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
       }
-  
-      req.db.query(checkName, [req.body.name], (err, result) => {
+      if (result[0]['count'] > 0) {
+        res.status(400).json({ error: 'The entity already exists!' });
+        return;
+      }
+
+      req.db.query(updateQuery, [req.body.name, req.params.idEntities], (err, result) => {
         if (err) {
           res.status(500).json({ error: err.message });
           return;
         }
-        if (result[0]['count'] > 0) {
-          res.status(400).json({ error: 'The entity already exists!' });
-          return;
-        }
-  
-        req.db.query(updateQuery, [req.body.name, req.params.idEntities], (err, result) => {
+
+        req.db.commit((err) => {
           if (err) {
-            res.status(500).json({ error: err.message });
-            return;
+            return req.db.rollback(() => {
+              res.status(500).json({ error: err.message });
+            });
           }
-  
-          req.db.commit((err) => {
-            if (err) {
-              return req.db.rollback(() => {
-                res.status(500).json({ error: err.message });
-              });
-            }
-            res.json({ message: 'Entity updated successfully!' });
-          });
+          res.json({ message: 'Entity updated successfully!' });
         });
       });
     });
   });
+});
 
 /**
  * @openapi
@@ -290,17 +290,17 @@ router.delete('/deleteEntity/:idEntities', function (req, res, next) {
   }
 
   req.db.query(deleteQuery, [req.params.idEntities], (err, result) => {
-      if (err) {
-          res.status(500).json({ error: err.message });
-          return;
-      }
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
 
-      if (result.affectedRows == 0) {
-          res.status(400).json({ error: 'No entity found with the provided ID or cannot delete that entity!' });
-          return;
-      }
+    if (result.affectedRows == 0) {
+      res.status(400).json({ error: 'No entity found with the provided ID or cannot delete that entity!' });
+      return;
+    }
 
-      res.json({ message: 'Entity deleted successfully!' });
+    res.json({ message: 'Entity deleted successfully!' });
   });
 });
 

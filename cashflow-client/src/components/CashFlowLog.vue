@@ -12,7 +12,7 @@
                         :aria-controls="'collapse' + log.idcashflowLog">
                         Transaction ID: {{ log.idcashflowLog }} &nbsp;<b
                             :class="{ 'text-danger': log.type == 'Expense', 'text-success': log.type == 'Income' }">{{
-                log.type }}</b>
+                            log.type }}</b>
                         &nbsp;
                         Name: {{ log.name }} Value: {{ log.value }} Currency: {{ log.currency }}
                         Date: {{ log.date }}
@@ -34,7 +34,7 @@
                                 @change="inputChanging()">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
                                     {{
-                entity.name }}</option>
+                                    entity.name }}</option>
                             </select>
                         </div>
 
@@ -116,7 +116,7 @@
                                 aria-describedby="inputGroup-sizing-default" v-model="idEntityInsert">
                                 <option v-for="entity in entities" :key="entity.idEntities" :value="entity.idEntities">
                                     {{
-                entity.name }}</option>
+                                    entity.name }}</option>
                             </select>
                         </div>
 

@@ -8,8 +8,8 @@
       </div>
       <div class="mb-3">
         <label for="inputRepeatPassword" class="form-label">Password</label>
-        <input v-model="repeatPassword" type="password" class="form-control" id="inputRepeatPassword" aria-describedby="pwHelp"
-          required>
+        <input v-model="repeatPassword" type="password" class="form-control" id="inputRepeatPassword"
+          aria-describedby="pwHelp" required>
       </div>
       <div class="mb-3">
         <label for="inputPassword" class="form-label">Repeat password</label>
@@ -93,23 +93,23 @@ export default {
         });
     },
     insertEntity() {
-          axios.post('http://localhost:3000/entities/addEntity', {
-            name: this.username,
-            isUser: 1,
-          }).then(response => {
-            if (response.data.message) {
-              // entity inserted successfully
-            }
-          }).catch(error => {
-            this.showToast = true;
-            this.toastMessage = error.response.data.error;
-            setTimeout(() => {
-              this.showToast = false;
-            }, 5000);
-          });
-        },
+      axios.post('http://localhost:3000/entities/addEntity', {
+        name: this.username,
+        isUser: 1,
+      }).then(response => {
+        if (response.data.message) {
+          // entity inserted successfully
+        }
+      }).catch(error => {
+        this.showToast = true;
+        this.toastMessage = error.response.data.error;
+        setTimeout(() => {
+          this.showToast = false;
+        }, 5000);
+      });
     },
-  }
+  },
+}
 </script>
 
 <style scoped>

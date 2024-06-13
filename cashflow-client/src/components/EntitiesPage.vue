@@ -12,7 +12,7 @@
             Entity ID: {{ entity.idEntities }} &nbsp;
             Name: {{ entity.name }} &nbsp;
             User:&nbsp; <b :class="{ 'text-success': entity.isUser, 'text-danger': !entity.isUser }">{{
-        getUserStatus(entity.isUser) }}</b>
+              getUserStatus(entity.isUser) }}</b>
           </button>
         </h2>
 
@@ -44,6 +44,7 @@
     </div>
   </div>
   <button type="button" class="btn-insert" data-bs-toggle="modal" data-bs-target="#insertModal">Insert</button>
+
   <!-- MODAL POPUP -->
   <div class="modal fade" id="insertModal" tabindex="-1" aria-labelledby="InsertPopup" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

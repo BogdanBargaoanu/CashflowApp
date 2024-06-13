@@ -19,10 +19,6 @@
       <button @click="login($event)" type="submit" class="btn btn-primary">Login</button>
       <p class="create-account-info">Don't have an account? <router-link to="/register">Register</router-link></p>
     </form>
-
-
-
-
     <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true"
       :class="{ 'show': showToast }" style="position: absolute; top: 0; right: 0;">
       <div class="toast-header">
