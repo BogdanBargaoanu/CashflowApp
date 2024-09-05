@@ -5,10 +5,12 @@ This project is a full-stack cashflow management application built with Vue.js o
 **Key Features:**
 
 - **Intuitive Interface:** The Vue.js client app provides a user-friendly experience for managing transactions.
-- **Secure Login:** User authentication is ensured through JWT (JSON Web Token) for a robust login process. //to be added - password crypting
+- **Secure Login:** User authentication is ensured through JWT (JSON Web Token) for a robust login process.
+  
+  > Every user's password is hashed using the MD5 algorithm for enchanced security.
 - **Local MySQL Database:** Stores your financial data securely on your local machine using MySQL.
 - **Transaction Logging:** Keeps track of all your income and expenses, allowing for comprehensive financial analysis.
-- **Time-Based Tracking:** Visualize your cashflow trends over time by integrating with Google Graphs.
+- **Time-Based Tracking:** Visualize your cashflow trends over time with the integration of Google Graphs.
 - **Swagger API Documentation:** The server-side application offers a well-defined API using Swagger, making it easy for developers to interact with the backend.
 
 ## Prerequisites
