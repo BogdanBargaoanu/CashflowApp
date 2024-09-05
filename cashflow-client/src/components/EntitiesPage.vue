@@ -12,7 +12,7 @@
             Entity ID: {{ entity.idEntities }} &nbsp;
             Name: {{ entity.name }} &nbsp;
             User:&nbsp; <b :class="{ 'text-success': entity.isUser, 'text-danger': !entity.isUser }">{{
-              getUserStatus(entity.isUser) }}</b>
+        getUserStatus(entity.isUser) }}</b>
           </button>
         </h2>
 

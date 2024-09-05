@@ -407,7 +407,7 @@ router.post('/updateLog/:idcashflowLog', function (req, res, next) {
     if (!req.params.idcashflowLog) {
         res.status(400).json({ error: 'The request has missing information!' });
         return;
-      }
+    }
 
     const token = authHeader.split(' ')[1]; // get the token from the Authorization header
     let userId;
@@ -419,11 +419,11 @@ router.post('/updateLog/:idcashflowLog', function (req, res, next) {
         return;
     }
     const idcashflowLog = req.params.idcashflowLog,
-    idEntity = req.body.idEntity,
-    type = req.body.type,
-    value = req.body.value,
-    currency = req.body.currency,
-    date = req.body.date;
+        idEntity = req.body.idEntity,
+        type = req.body.type,
+        value = req.body.value,
+        currency = req.body.currency,
+        date = req.body.date;
     console.log(`${idcashflowLog} ${idEntity} ${type} ${value} ${currency} ${date}`);
     if (!idcashflowLog || !idEntity || !type || !value || !currency /*|| !description*/ || !date) {
         res.status(400).json({ success: false, error: 'Missing required fields' });
@@ -499,24 +499,23 @@ module.exports = router;
 
 router.delete('/deleteLog/:idcashflowLog', function (req, res, next) {
     const deleteQuery = 'DELETE FROM cashflowlog WHERE idcashflowLog = ?';
-  
+
     if (!req.params.idcashflowLog) {
-      res.status(400).json({ error: 'The request has missing information!' });
-      return;
+        res.status(400).json({ error: 'The request has missing information!' });
+        return;
     }
-  
+
     req.db.query(deleteQuery, [req.params.idcashflowLog], (err, result) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;
         }
-  
+
         if (result.affectedRows == 0) {
             res.status(400).json({ error: 'No cashflow log found with the provided id!' });
             return;
         }
-  
+
         res.json({ message: 'Log deleted successfully!' });
     });
-  });
-  
+});

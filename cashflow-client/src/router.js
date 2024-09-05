@@ -9,11 +9,11 @@ import GraphCashflow from './components/GraphCashflow.vue';
 const routes = [
   { path: '/', redirect: '/dashboard' },
   { path: '/login', component: UserLogin },
-  { path: '/register', component: RegistrationPage},
+  { path: '/register', component: RegistrationPage },
   { path: '/dashboard', component: DashboardPage, meta: { requiresAuth: true } },
   { path: '/cashflow-log', component: CashFlowLog, meta: { requiresAuth: true } },
-  { path: '/entities', component: EntitiesPage, meta: { requiresAuth: true }},
-  { path: '/graph', component: GraphCashflow, meta: { requiresAuth: true }}
+  { path: '/entities', component: EntitiesPage, meta: { requiresAuth: true } },
+  { path: '/graph', component: GraphCashflow, meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({
