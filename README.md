@@ -1,6 +1,7 @@
 <div align="center" class="text-center">
+  <img src="https://raw.githubusercontent.com/BogdanBargaoanu/CashflowApp/refs/heads/main/cashflow-client/src/assets/cashflowapp_logo.png" style="width: 150px;">
   <h1>CashflowApp</h1>
-  <p><em>Track your finances with Vue.js, Node.js and MySQL.</em></p>
+  <p><em>Track your finances, analyze and prosper.</em></p>
 
   <img alt="last-commit" src="https://img.shields.io/github/last-commit/BogdanBargaoanu/CashflowApp?style=flat&logo=git&logoColor=white&color=0080ff">
   <img alt="repo-top-language" src="https://img.shields.io/github/languages/top/BogdanBargaoanu/CashflowApp?style=flat&color=0080ff">
