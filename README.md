@@ -95,3 +95,5 @@ This project is a full-stack cashflow management application built with Vue.js o
    Open your web browser and navigate to `http://localhost:8081`.
     
    
+### Additional information
+Check out this repository for a Vue.js introduction based on this project, with an included tutorial: https://github.com/BogdanBargaoanu/Vue.js-Introduction
